@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="com.heavenstar.zandi.persistance.RepoDao">
+ 
+ 	<select id="selectAll" resultType="UserVO">
+ 		SELECT * FROM tbl_repos
+ 	</select>
+
+ 	<select id="findByRepo" resultType="RepoVO">
+ 		SELECT * FROM tbl_repos WHERE r_username = #{r_username}
+ 	</select>
+ 	
+ 	<insert id="insert" parameterType="RepoVO">
+ 		INSERT INTO tbl_repos(
+ 			r_seq,
+ 			r_username,
+ 			r_reponame
+ 		)VALUES(
+ 			#{r_seq},
+ 			#{r_username},
+ 			#{r_reponame}
+ 		)
+ 	</insert>
+ 	
+ 	<update id="update" >
+ 	</update>
+ 	<delete id="delete">
+ 	</delete>
+ 	
+ 	<select id="create_repo_table">
+ 		CREATE TABLE IF NOT EXISTS tbl_repos(
+ 			r_seq BIGINT PRIMARY KEY auto_increment,
+ 			r_username VARCHAR(20),
+ 			r_reponame VARCHAR(30)
+ 		)
+ 	</select>
+
+ </mapper> 

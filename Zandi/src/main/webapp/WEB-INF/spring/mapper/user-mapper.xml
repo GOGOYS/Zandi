@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="com.heavenstar.zandi.persistance.UserDao">
+ 
+ 	<select id="selectAll" resultType="UserVO">
+ 		SELECT * FROM tbl_users
+ 	</select>
+ 	<select id="findById" resultType="UserVO">
+ 		SELECT * FROM tbl_users WHERE username = #{username}
+ 	</select>
+ 	<select id="findByAName" resultType="UserVO">
+		SELECT * FROM tbl_users WHERE nickname = #{nickname}
+ 	</select>
+ 	
+ 	<insert id="insert" parameterType="UserVO">
+		INSERT INTO tbl_users(
+			username,
+			password,
+			nickname,
+			email
+		) VALUES(
+			#{username},
+			#{password},
+			#{nickname},
+			#{email}
+		)
+		
+ 	</insert>
+ 	
+
+ 	
+ 	
+ 	<update id="update" parameterType="UserVO">
+ 		UPDATE tbl_users
+ 		SET password = #{password},
+ 			nickname = #{nickname},
+ 			email = #{email}
+ 		WHERE  username = #{username}
+ 	</update>
+ 	<delete id="delete">
+
+ 	</delete>
+ 	
+ 	<select id="create_user_table">
+		CREATE TABLE IF NOT EXISTS tbl_users(
+			username VARCHAR(20) PRIMARY KEY,
+			password VARCHAR(30) NOT NULL,
+			nickname VARCHAR(10),
+			email VARCHAR(30)
+		)
+ 	</select>
+
+
+ </mapper> 
