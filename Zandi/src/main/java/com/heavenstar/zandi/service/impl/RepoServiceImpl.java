@@ -22,9 +22,15 @@ public class RepoServiceImpl implements RepoService{
 	}
 
 	@Override
-	public List<RepoVO> findByRepo(String r_username) {
+	public List<RepoVO> findByAllRepo(String r_username) {
 		// TODO Auto-generated method stub
-		return repoDao.findByRepo(r_username);
+		return repoDao.findByAllRepo(r_username);
+	}
+	
+	@Override
+	public RepoVO findByOneRepo(long r_seq) {
+		// TODO Auto-generated method stub
+		return repoDao.findByOneRepo(r_seq);
 	}
 
 	@Override
@@ -50,5 +56,6 @@ public class RepoServiceImpl implements RepoService{
 		// TODO Auto-generated method stub
 		
 	}
+
 
 }

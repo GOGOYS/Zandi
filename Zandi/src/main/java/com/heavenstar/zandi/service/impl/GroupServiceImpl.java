@@ -25,7 +25,7 @@ public class GroupServiceImpl implements GroupService{
 	}
 
 	@Override
-	public GroupVO findByGroup(int g_seq) {
+	public GroupVO findByGroup(long g_seq) {
 		// TODO Auto-generated method stub
 		return groupDao.findByGroup(g_seq);
 	}

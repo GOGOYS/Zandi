@@ -50,54 +50,48 @@ public class GroupController {
 		
 		groupService.insert(groupVO);
 		
-		return "redirect:/group/home";
+		return "redirect:/group";
 	}
 	
-	@RequestMapping(value="/join/{g_seq}",method=RequestMethod.GET)
+	@RequestMapping(value="/group_in/{g_seq}",method=RequestMethod.GET)
 	public String join(@PathVariable("g_seq") String g_seq, HttpSession session, Model model ) {
 		
 		UserVO userVO = (UserVO)session.getAttribute("USER");
+		long longSeq = Long.valueOf(g_seq);
+		GroupVO groupName = groupService.findByGroup(longSeq);
 		GroupVO group = new GroupVO();
-		int intSeq = Integer.valueOf(g_seq);
-		GroupVO groupName = groupService.findByGroup(intSeq);
 		group.setJ_gname(groupName.getG_name());
 		group.setJ_username(userVO.username);
 		
 		List<GroupVO> peopleList = groupService.findByGroupPeople(groupName.getG_name());
 		
-		int count =0;
-		for(int i =0; i < peopleList.size(); i++) {
-			
-			if(peopleList.get(i).getJ_username() == userVO.username) {
-				count = 1;
-			}
-			
+		//이미 가입 했을때
+		for(int i =0; i < peopleList.size(); i++) {	
+			if(peopleList.get(i).getJ_username().equals(userVO.username)) {
+				log.debug("????????ㅇㅁㄴㅇㄴㅁㅇ");
+				model.addAttribute("GROUP",groupName);
+				model.addAttribute("PEOPLELIST",peopleList);
+				
+				return "/group/group_in";
+			}			
 		}
+		
+		// 
+		if(peopleList.size() >= groupName.getG_people()) {
+			return "redirect:/group";
+
+		}
+			
+		
 		groupService.insertPeople(group);
 		
-		
-		
 		model.addAttribute("GROUP",groupName);
 		model.addAttribute("PEOPLELIST",peopleList);
 		
-		return "/group/group_in";
+		return "redirect:/group/group_in";
+		
 	}
 	
-	@RequestMapping(value="/group_in/{g_seq}",method=RequestMethod.GET)
-	public String group_in(@PathVariable("g_seq") String g_seq, Model model) throws IOException, ParseException{
-		
-		int intSeq = Integer.valueOf(g_seq);
-		GroupVO groupName = groupService.findByGroup(intSeq);
-		
-		List<GroupVO> peopleList = groupService.findByGroupPeople(groupName.getG_name());
-		
-		model.addAttribute("GROUP",groupName);
-		model.addAttribute("PEOPLELIST",peopleList);
-		
-		for(int i =0; i < peopleList.size(); i++) {
-			GitCommitVO git = gitService.oneCommit("유저이름", "레포이름");
-		}
-		return "/group/group_in";
-	}
+
 	
 }

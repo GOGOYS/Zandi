@@ -42,10 +42,12 @@ public class GitController {
 		
 		UserVO username = (UserVO)session.getAttribute("USER");
 		
-		List<RepoVO> repoList = repoService.findByRepo(username.username);
+		List<RepoVO> repoList = repoService.findByAllRepo(username.username);
 		if(!(repoList == null)) {
 			model.addAttribute("REPOLIST",repoList);
 		}
+		
+		model.addAttribute("USER",username);
 		
 		return "git/home";
 	}
@@ -65,30 +67,36 @@ public class GitController {
 		repoService.insert(repoVO);
 		
 
-		return "redirect:/git/home";
+		return "redirect:/git";
 	}
 	
-	@RequestMapping(value="/detail_repo/{repo}",method=RequestMethod.GET)
-	public String detail_repo(@PathVariable("repo") String repo,HttpSession session, Model model)throws IOException, ParseException {
+	@RequestMapping(value="/detail_repo/{seq}",method=RequestMethod.GET)
+	public String detail_repo(@PathVariable("seq") String r_seq, Model model)throws IOException, ParseException {
 		
-		UserVO username = (UserVO)session.getAttribute("USER");
+		
+		long longSeq = Long.valueOf(r_seq);
+		
+		RepoVO repoVO = repoService.findByOneRepo(longSeq);
 		
 		//한개 커밋 가져오기
-		GitCommitVO gitVO = gitService.oneCommit(username.getUsername(),repo);
-		gitVO.setReponame(repo);
+		GitCommitVO gitVO = gitService.oneCommit(repoVO.getR_username(),repoVO.getR_reponame());
+		gitVO.setReponame(repoVO.getR_reponame());
+		
+		int todayOk = gitService.todayOk(gitVO.getCommitter().getDate());
+		log.debug("오오:{}",todayOk);
 		model.addAttribute("REPO",gitVO);
 		
 		//리드미 가져오기
-		ReadmeVO readmeVO = gitService.getReadme(username.getUsername(),repo);
+		ReadmeVO readmeVO = gitService.getReadme(repoVO.getR_username(),repoVO.getR_reponame());
 		model.addAttribute("README",readmeVO);
 		
 		//여러개 커밋 가져오기
-		List<GitCommitVO> gitList = gitService.allCommit(username.getUsername(), repo);
+		List<GitCommitVO> gitList = gitService.allCommit(repoVO.getR_username(),repoVO.getR_reponame());
 		model.addAttribute("GITLIST",gitList);
 		
 		//gitService.readmeTransate(readmeVO.getContent());
 		
-		return "git/detail/_repo";
+		return "git/detail_repo";
 	}
 	
 	

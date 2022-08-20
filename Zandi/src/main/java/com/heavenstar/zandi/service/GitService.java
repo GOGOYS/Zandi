@@ -20,6 +20,9 @@ public interface GitService {
 	// 커밋 날짜 변환
 	public String dataTransate(String date);
 	
+	//오늘 커밋 확인
+	public int todayOk(String date);
+	
 	//리드미 변환
 	public String readmeTransate(String readme);
 	

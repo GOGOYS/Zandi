@@ -7,7 +7,7 @@ import com.heavenstar.zandi.model.GroupVO;
 public interface GroupDao {
 	
 	public List<GroupVO> selectAll();
-	public GroupVO findByGroup(int g_seq);
+	public GroupVO findByGroup(long g_seq);
 	public List<GroupVO> findByGroupPeople(String g_name);
 	public int insert(GroupVO groupVO);
 	public int insertPeople(GroupVO groupVO);

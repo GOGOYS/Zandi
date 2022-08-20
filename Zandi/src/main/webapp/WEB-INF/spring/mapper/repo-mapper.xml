@@ -9,8 +9,12 @@
  		SELECT * FROM tbl_repos
  	</select>
 
- 	<select id="findByRepo" resultType="RepoVO">
+ 	<select id="findByAllRepo" resultType="RepoVO">
  		SELECT * FROM tbl_repos WHERE r_username = #{r_username}
+ 	</select>
+ 	
+ 	<select id="findByOneRepo" resultType="RepoVO">
+ 		SELECT * FROM tbl_repos WHERE r_seq = #{r_seq}
  	</select>
  	
  	<insert id="insert" parameterType="RepoVO">

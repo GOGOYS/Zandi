@@ -12,8 +12,8 @@
  		SELECT * FROM tbl_group WHERE g_seq = #{g_seq}
  	</select>
  	<select id="findByGroupPeople" resultType="GroupVO">
- 		SELECT * FROM tbl_join_group 
- 			WHERE j_gname = #{j_gname}
+ 		SELECT * FROM tbl_join_group
+					WHERE j_gname = #{j_gname}
  	</select>
 
  	<insert id="insert" parameterType="GroupVO">

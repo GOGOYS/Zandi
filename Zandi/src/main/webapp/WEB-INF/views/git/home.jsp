@@ -10,14 +10,20 @@
 </head>
 <body>
 	<h1>My Zandi</h1>
-	<h2>My Repo</h2>
 	
+	<div>
+		<img src="https://ghchart.rshah.org/${USER.username}" />
+	</div>
+	
+	<h2>My Repo</h2>
 	<c:if test="${not empty REPOLIST}">
-		<c:forEach items="${REPOLIST}" var="REPO">
-			<div data-set="${REPO.r_seq}">
-				<div>${REPO.r_reponame}</div>
-			</div>
-		</c:forEach>
+		<div class="container">
+			<c:forEach items="${REPOLIST}" var="REPO">
+				<div class="target" data-seq="${REPO.r_seq}">
+					<span>${REPO.r_reponame}</span>
+				</div>
+			</c:forEach>
+		</div>
 	</c:if>
 
 
@@ -30,4 +36,9 @@
 	</form>
 
 </body>
+<script>
+	const rootPath = "${rootPath}"
+</script>
+
+<script src="${rootPath}/static/js/repo.js?var=2022-08-20-003"></script>
 </html>

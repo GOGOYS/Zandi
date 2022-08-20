@@ -216,6 +216,26 @@ public class GitServiceImpl implements GitService{
 	}
 
 
+	@Override
+	public int todayOk(String date) {
+		
+		String[] result = date.split(" ");
+		
+		Date curDate = new Date(System.currentTimeMillis());
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String today = dateFormat.format(curDate);
+		
+		log.debug("아아아:{}",result[0]);
+		log.debug("아아아:{}",today);
+		if(result[0].equals(today)) {
+			return 1;
+		}
+		
+		return 0;
+	}
+
+
 
 	
 	
