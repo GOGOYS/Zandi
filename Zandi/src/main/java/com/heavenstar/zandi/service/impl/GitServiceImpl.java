@@ -165,11 +165,9 @@ public class GitServiceImpl implements GitService{
         JSONObject obj = (JSONObject)parse.parse(retString);
                 
         String json = obj.toString();
-        log.debug("리드미JSON:{}",obj);
         
         ObjectMapper mapper = new ObjectMapper();
         ReadmeVO readmeVO = mapper.readValue(json, ReadmeVO.class);
-        log.debug("리드미VO:{}",readmeVO);
 
 
 		return readmeVO;
@@ -204,14 +202,10 @@ public class GitServiceImpl implements GitService{
 		String text = readme;
         byte[] targetBytes = text.getBytes();
         
-        log.debug("text:{}",text);
-        log.debug("byte[]:{}",targetBytes);
-
 		
         Decoder decoder = Base64.getDecoder();
         byte[] decodedBytes = decoder.decode(targetBytes);
 		
-		log.debug("디코딩:{}",decodedBytes);
 		return null;
 	}
 
@@ -226,8 +220,6 @@ public class GitServiceImpl implements GitService{
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String today = dateFormat.format(curDate);
 		
-		log.debug("아아아:{}",result[0]);
-		log.debug("아아아:{}",today);
 		if(result[0].equals(today)) {
 			return 1;
 		}

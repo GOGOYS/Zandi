@@ -83,7 +83,12 @@ public class GitController {
 		gitVO.setReponame(repoVO.getR_reponame());
 		
 		int todayOk = gitService.todayOk(gitVO.getCommitter().getDate());
-		log.debug("오오:{}",todayOk);
+		if(todayOk > 0) {
+			model.addAttribute("TODAYOK","OK");
+		}else {
+			model.addAttribute("TODAYOK","NO");
+			
+		}
 		model.addAttribute("REPO",gitVO);
 		
 		//리드미 가져오기
