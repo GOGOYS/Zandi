@@ -15,6 +15,10 @@
  		SELECT * FROM tbl_join_group
 					WHERE j_gname = #{j_gname}
  	</select>
+ 	<select id="findByOnePeople" resultType="GroupVO">
+ 		SELECT * FROM tbl_join_group
+					WHERE j_gname = #{j_gname} AND j_username = #{j_username}
+ 	</select>
 
  	<insert id="insert" parameterType="GroupVO">
 		INSERT INTO tbl_group(
@@ -42,7 +46,11 @@
  		)
  	</insert>
  	<update id="update" parameterType="GroupVO">
-
+		UPDATE tbl_join_group
+		SET j_gname = #{j_gname}, 
+			j_username = #{j_username},
+			j_userrepo = #{j_userrepo}
+		WHERE j_seq = #{j_seq} 
  	</update>
  	<delete id="delete" >
 		DELETE tbl_group WHERE g_seq = #{g_seq}
@@ -65,7 +73,8 @@
 		CREATE TABLE IF NOT EXISTS tbl_join_group(
 			j_seq BIGINT AUTO_INCREMENT PRIMARY KEY,
 			j_gname VARCHAR(20),
-			j_username VARCHAR(20)
+			j_username VARCHAR(20),
+			j_userrepo VARCHAR(20)
 		)
  	</select>
  	

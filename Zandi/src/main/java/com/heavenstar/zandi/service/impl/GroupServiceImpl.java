@@ -35,6 +35,12 @@ public class GroupServiceImpl implements GroupService{
 		// TODO Auto-generated method stub
 		return groupDao.findByGroupPeople(g_name);
 	}
+	
+	@Override
+	public GroupVO findByOnePeople(String j_gname, String j_username) {
+		// TODO Auto-generated method stub
+		return groupDao.findByOnePeople(j_gname, j_username);
+	}
 
 	@Override
 	public int insert(GroupVO groupVO) {
@@ -51,7 +57,7 @@ public class GroupServiceImpl implements GroupService{
 	@Override
 	public int update(GroupVO groupVO) {
 		// TODO Auto-generated method stub
-		return 0;
+		return groupDao.update(groupVO);
 	}
 
 	@Override

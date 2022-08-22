@@ -15,6 +15,8 @@ import lombok.ToString;
 @ToString
 public class GitCommitVO {
 	
+	private String documentation_url;
+	
 	private String reponame;
 	
 	private String message;

@@ -23,4 +23,5 @@ public class GroupVO {
 	private String j_seq;
 	private String j_gname;
 	private String j_username;
+	private String j_userrepo;
 }

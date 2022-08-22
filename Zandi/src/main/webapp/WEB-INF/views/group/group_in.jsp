@@ -16,6 +16,13 @@
 	<c:forEach items="${PEOPLELIST}" var="PEOPLE">
 		<div>${PEOPLE.j_username}</div>
 	</c:forEach>
+	
+	
+	<form action="${rootPath}/group/group_in/${GROUP.g_seq}" method="POST">
+		<label>레포 등록: </label>
+		<input name="j_userrepo" placeholder="스터디에 넣을 레포를 입력하세요">
+		<button>등록하기</button>
+	</form>
 
 
 </body>
