@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded",()=>{
 
-    const container = document.querySelector("div.container");
+    const container = document.querySelector("div.repo-container");
 
     container?.addEventListener("click",(e)=>{
 

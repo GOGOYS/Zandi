@@ -82,6 +82,8 @@ public class GitController {
 		GitCommitVO gitVO = gitService.oneCommit(repoVO.getR_username(),repoVO.getR_reponame());
 		gitVO.setReponame(repoVO.getR_reponame());
 		
+		gitService.readmeTransate(null);
+		
 		int todayOk = gitService.todayOk(gitVO.getCommitter().getDate());
 		if(todayOk > 0) {
 			model.addAttribute("TODAYOK","OK");

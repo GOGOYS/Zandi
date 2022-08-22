@@ -53,10 +53,16 @@ public class UserController {
 		
 		UserVO user = userService.findById(userVO.username);
 		
+		if(user == null) {
+			model.addAttribute("error","LOGIN_FAIL");
+			return "user/login";
+		}
+		
 		if(user.password.equals(userVO.password)) {
 			session.setAttribute("USER", userVO);
 			return "redirect:/";
 		}
+		
 		model.addAttribute("error","LOGIN_FAIL");
 		return "user/login";
 	}

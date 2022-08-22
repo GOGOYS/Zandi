@@ -7,19 +7,33 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+	
+	.repo-box{
+		width:300px;
+		height: 60px;
+		background-color: skyblue;
+		border-radius: 8px;
+		margin-bottom: 6px;
+	}
+	.repo-box span{
+		color:white;
+		font-weight: 900;
+	}
+</style>
 </head>
 <body>
 	<h1>My Zandi</h1>
 	
-	<div>
+	<div class="zandi-img">
 		<img src="https://ghchart.rshah.org/${USER.username}" />
 	</div>
 	
 	<h2>My Repo</h2>
 	<c:if test="${not empty REPOLIST}">
-		<div class="container">
+		<div class="repo-container">
 			<c:forEach items="${REPOLIST}" var="REPO">
-				<div class="target" data-seq="${REPO.r_seq}">
+				<div class="target repo-box" data-seq="${REPO.r_seq}">
 					<span>${REPO.r_reponame}</span>
 				</div>
 			</c:forEach>
@@ -40,5 +54,5 @@
 	const rootPath = "${rootPath}"
 </script>
 
-<script src="${rootPath}/static/js/repo.js?var=2022-08-20-003"></script>
+<script src="${rootPath}/static/js/repo.js?var=2022-08-22-001"></script>
 </html>

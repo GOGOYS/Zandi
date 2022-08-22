@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Base64.Decoder;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -168,7 +168,9 @@ public class GitServiceImpl implements GitService{
         
         ObjectMapper mapper = new ObjectMapper();
         ReadmeVO readmeVO = mapper.readValue(json, ReadmeVO.class);
-
+        
+        log.debug("미미미미:{}",readmeVO.getContent());
+        readmeVO.setMessage(readmeTransate(readmeVO.getContent()));
 
 		return readmeVO;
 	}
@@ -197,16 +199,12 @@ public class GitServiceImpl implements GitService{
 
 
 	@Override
-	public String readmeTransate(String readme) {
+	public String readmeTransate(String content) {
 		
-		String text = readme;
-        byte[] targetBytes = text.getBytes();
-        
+		byte[] decoded = Base64.getDecoder().decode(content);
+		String read = new String(decoded, StandardCharsets.UTF_8);
 		
-        Decoder decoder = Base64.getDecoder();
-        byte[] decodedBytes = decoder.decode(targetBytes);
-		
-		return null;
+		return read;
 	}
 
 
