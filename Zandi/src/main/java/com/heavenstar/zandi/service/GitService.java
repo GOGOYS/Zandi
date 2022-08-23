@@ -1,6 +1,7 @@
 package com.heavenstar.zandi.service;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.json.simple.parser.ParseException;
@@ -24,6 +25,6 @@ public interface GitService {
 	public int todayOk(String date);
 	
 	//리드미 변환
-	public String readmeTransate(String readme);
+	public String readmeTransate(String readme)throws UnsupportedEncodingException;
 	
 }

@@ -17,6 +17,13 @@
 		<div>${PEOPLE.j_username}</div>
 	</c:forEach>
 	
+	<c:forEach items="${TOOK}" var="TOOK">
+		<div>
+			<div>${TOOK.username}님의 ${TOOK.reponame}</div>
+			<div>오늘 커밋 : ${TOOK.message}</div>
+		</div>
+	</c:forEach>
+	
 	
 	<form action="${rootPath}/group/group_in/${GROUP.g_seq}" method="POST">
 		<label>레포 등록: </label>

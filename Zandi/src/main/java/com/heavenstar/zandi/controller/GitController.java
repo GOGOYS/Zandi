@@ -82,7 +82,6 @@ public class GitController {
 		GitCommitVO gitVO = gitService.oneCommit(repoVO.getR_username(),repoVO.getR_reponame());
 		gitVO.setReponame(repoVO.getR_reponame());
 		
-		gitService.readmeTransate(null);
 		
 		int todayOk = gitService.todayOk(gitVO.getCommitter().getDate());
 		if(todayOk > 0) {
@@ -94,8 +93,8 @@ public class GitController {
 		model.addAttribute("REPO",gitVO);
 		
 		//리드미 가져오기
-		ReadmeVO readmeVO = gitService.getReadme(repoVO.getR_username(),repoVO.getR_reponame());
-		model.addAttribute("README",readmeVO);
+		//ReadmeVO readmeVO = gitService.getReadme(repoVO.getR_username(),repoVO.getR_reponame());
+		//model.addAttribute("README",readmeVO);
 		
 		//여러개 커밋 가져오기
 		List<GitCommitVO> gitList = gitService.allCommit(repoVO.getR_username(),repoVO.getR_reponame());

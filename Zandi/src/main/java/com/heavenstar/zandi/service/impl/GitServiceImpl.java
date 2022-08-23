@@ -3,6 +3,7 @@ package com.heavenstar.zandi.service.impl;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -169,8 +170,8 @@ public class GitServiceImpl implements GitService{
         ObjectMapper mapper = new ObjectMapper();
         ReadmeVO readmeVO = mapper.readValue(json, ReadmeVO.class);
         
-        log.debug("미미미미:{}",readmeVO.getContent());
-        readmeVO.setMessage(readmeTransate(readmeVO.getContent()));
+        String content = readmeVO.getContent();
+        readmeVO.setContent(readmeTransate(content));
 
 		return readmeVO;
 	}
@@ -199,9 +200,12 @@ public class GitServiceImpl implements GitService{
 
 
 	@Override
-	public String readmeTransate(String content) {
+	public String readmeTransate(String content) throws UnsupportedEncodingException {
 		
-		byte[] decoded = Base64.getDecoder().decode(content);
+		String target = content;
+		  byte[] targetBytes = target.getBytes("UTF-8");
+		
+		byte[] decoded = Base64.getDecoder().decode(targetBytes);
 		String read = new String(decoded, StandardCharsets.UTF_8);
 		
 		return read;

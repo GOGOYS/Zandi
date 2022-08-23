@@ -27,6 +27,7 @@
 	
 	a{
 		color: #aaa;
+		text-decoration: none;
 	}
 	
 	img{
