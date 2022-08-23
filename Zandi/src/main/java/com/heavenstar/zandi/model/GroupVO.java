@@ -18,6 +18,7 @@ public class GroupVO {
 	public long g_seq;
 	public String g_name;
 	public int g_people;
+	public int g_inpeople;
 	public String g_enddate;
 	
 	private String j_seq;

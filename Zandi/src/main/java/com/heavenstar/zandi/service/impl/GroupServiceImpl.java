@@ -55,6 +55,11 @@ public class GroupServiceImpl implements GroupService{
 	}
 
 	@Override
+	public int updateCount(GroupVO groupVO) {
+		// TODO Auto-generated method stub
+		return groupDao.updateCount(groupVO);
+	}
+	@Override
 	public int update(GroupVO groupVO) {
 		// TODO Auto-generated method stub
 		return groupDao.update(groupVO);
@@ -83,6 +88,7 @@ public class GroupServiceImpl implements GroupService{
 		// TODO Auto-generated method stub
 		
 	}
+
 
 
 

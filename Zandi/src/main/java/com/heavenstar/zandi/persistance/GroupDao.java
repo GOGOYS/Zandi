@@ -15,6 +15,7 @@ public interface GroupDao {
 	public int insert(GroupVO groupVO);
 	public int insertPeople(GroupVO groupVO);
 	public int update(GroupVO groupVO);
+	public int updateCount(GroupVO groupVO);
 	public int delete(String g_name);
 	public int deletePeople(String j_username);
 	

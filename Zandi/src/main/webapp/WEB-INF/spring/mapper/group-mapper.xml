@@ -45,6 +45,12 @@
 			#{j_username}
  		)
  	</insert>
+ 	
+ 	<update id="updateCount" parameterType="GroupVO">
+ 		UPDATE tbl_group
+ 		SET g_inpeople = #{g_inpeople} 
+ 		WHERE g_seq = #{g_seq}
+ 	</update>
  	<update id="update" parameterType="GroupVO">
 		UPDATE tbl_join_group
 		SET j_gname = #{j_gname}, 
@@ -65,6 +71,7 @@
 			g_seq BIGINT AUTO_INCREMENT PRIMARY KEY,
 			g_name VARCHAR(20) NOT NULL UNIQUE,
 			g_people INT NOT NULL,
+			g_inpeople INT,
 			g_enddate VARCHAR(13)
 		)
  	</select>

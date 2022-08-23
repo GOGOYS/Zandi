@@ -24,7 +24,8 @@
 		</div>
 	</c:forEach>
 	
-	
+	<a href="${rootPath}/gorup">리스트 가기</a>
+	<a href="${rootPath}/group/out/${GROUP.g_seq}">스터디방 탈퇴하기</a>
 	<form action="${rootPath}/group/group_in/${GROUP.g_seq}" method="POST">
 		<label>레포 등록: </label>
 		<input name="j_userrepo" placeholder="스터디에 넣을 레포를 입력하세요">

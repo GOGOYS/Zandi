@@ -47,6 +47,7 @@ public class GroupController {
 	@RequestMapping(value={"/",""},method=RequestMethod.POST)
 	public String group(GroupVO groupVO) {
 		
+		groupVO.setG_inpeople(0);
 		groupService.insert(groupVO);
 		
 		return "redirect:/group";
@@ -69,22 +70,23 @@ public class GroupController {
 		for(int i =0; i < peopleList.size(); i++) {
 			String username = peopleList.get(i).getJ_username();
 			String reponame = peopleList.get(i).getJ_userrepo();
-			GitCommitVO  gitVO =gitService.oneCommit(username, reponame);
-			ToOkVO toOK = new ToOkVO();
-			int todayOk = gitService.todayOk(gitVO.getCommitter().getDate());
-			if(todayOk > 0) {
-				toOK.setUsername(username);
-				toOK.setReponame(reponame);
-				toOK.setMessage("완료");
-				gitList.add(toOK);
-			}else {
-				toOK.setUsername(username);
-				toOK.setReponame(reponame);
-				toOK.setMessage("미완료");
-				gitList.add(toOK);
-			}			
+			if(reponame != null) {
+				GitCommitVO  gitVO =gitService.oneCommit(username, reponame);
+				ToOkVO toOK = new ToOkVO();
+				int todayOk = gitService.todayOk(gitVO.getCommitter().getDate());
+				if(todayOk > 0) {
+					toOK.setUsername(username);
+					toOK.setReponame(reponame);
+					toOK.setMessage("완료");
+					gitList.add(toOK);
+				}else {
+					toOK.setUsername(username);
+					toOK.setReponame(reponame);
+					toOK.setMessage("미완료");
+					gitList.add(toOK);
+				}		
+			}
 		}
-		
 		model.addAttribute("TOOK",gitList);
 		
 		//입장 처리
@@ -96,8 +98,18 @@ public class GroupController {
 			}			
 		}
 		if(peopleList.size() >= groupName.getG_people()) {
+			model.addAttribute("MESSAGE","FULL_IN");
 			return "redirect:/group";
 		}
+		
+		
+		//한명도 가입 안되었으면 0넣고,
+		//그 다음부터 가입하면 1씩 증가
+		int count = groupName.getG_inpeople();
+			count += 1;
+			groupName.setG_inpeople(count);
+			groupService.updateCount(groupName);
+
 		groupService.insertPeople(group);
 		
 		
