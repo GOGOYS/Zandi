@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.heavenstar.zandi.model.GitCommitVO;
 import com.heavenstar.zandi.model.ReadmeVO;
+import com.heavenstar.zandi.model.RepoListVO;
 import com.heavenstar.zandi.service.GitService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +36,7 @@ public class GitServiceImpl implements GitService{
 	
 
 	@Override
-	public GitCommitVO oneCommit(String id, String repo) throws IOException, ParseException {
+	public int CommitOk(String id, String repo) throws IOException, ParseException {
 		//가장 최근 커밋
 		
 		
@@ -77,8 +78,10 @@ public class GitServiceImpl implements GitService{
         
         String transDate = dataTransate(gitVO.committer.getDate());
         gitVO.committer.setDate(transDate);
+        
+        int result = todayOk(gitVO.getCommitter().getDate());
 
-		return gitVO;
+		return result;
 	
 	}
 
@@ -227,6 +230,55 @@ public class GitServiceImpl implements GitService{
 		}
 		
 		return 0;
+	}
+
+
+	@Override
+	public List<RepoListVO> getRepoList(String username) throws IOException, ParseException{
+		
+		String url = " https://api.github.com/users/" + username+ "/repos";
+		
+		//파일 읽어들이기
+        URL realUrl = new URL(url);
+        HttpURLConnection conn = (HttpURLConnection) realUrl.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json");
+        BufferedReader rd;
+        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        }
+        
+        String retString = "";
+        String line;
+        while((line = rd.readLine()) != null) {
+        	retString += line;
+        }
+        rd.close();
+        conn.disconnect();
+        
+        
+        //문자열을  JSON 객체로 변환
+        JSONParser parse = new JSONParser();
+        JSONArray arr = (JSONArray)parse.parse(retString);
+                
+        
+        List<RepoListVO> repoList = new ArrayList<>();
+        
+        for(int i =0; i < arr.size(); i++) {
+        	
+	        JSONObject obj = (JSONObject)arr.get(i);
+	       
+	        String json = obj.toString();
+	        
+	        ObjectMapper mapper = new ObjectMapper();
+	        RepoListVO repoVO = mapper.readValue(json, RepoListVO.class);
+	        	        
+	        repoList.add(repoVO);
+        }
+        
+		return repoList;
 	}
 
 

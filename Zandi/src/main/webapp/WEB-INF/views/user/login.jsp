@@ -8,14 +8,18 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>로그인</h1>
-	<c:if test="${error == 'LOGIN_FAIL'}">
-		<div>아이디나 비밀번호가 틀렸습니다</div>
-	</c:if>
 	<form method="POST">
-		<input name="username">
-		<input name="password">
-		<button>전송</button>
+		<fieldset>
+			<legend>로그인</legend>
+				<c:if test="${error == 'LOGIN_FAIL'}">
+					<div>아이디나 비밀번호가 틀렸습니다</div>
+				</c:if>
+			<label for="id">ID : </label>
+			<input name="username" placeholder="github 이름을 입력하세요" id="id">
+			<label for="pass">PASSWORD : </label>
+			<input name="password" type="password" id="pass">
+			<button>전송</button>
+		</fieldset>
 	</form>
 </body>
 </html>

@@ -52,6 +52,11 @@ public class GroupController {
 		
 		return "redirect:/group";
 	}
+	@RequestMapping(value={"/list"},method=RequestMethod.GET)
+	public String grouplist() {
+		return "redirect:/group";
+	}
+	
 	
 	@RequestMapping(value="/group_in/{g_seq}",method=RequestMethod.GET)
 	public String group_in(@PathVariable("g_seq") String g_seq, HttpSession session, Model model ) throws IOException, ParseException {
@@ -71,10 +76,9 @@ public class GroupController {
 			String username = peopleList.get(i).getJ_username();
 			String reponame = peopleList.get(i).getJ_userrepo();
 			if(reponame != null) {
-				GitCommitVO  gitVO =gitService.oneCommit(username, reponame);
+				int  gitVO =gitService.CommitOk(username, reponame);
 				ToOkVO toOK = new ToOkVO();
-				int todayOk = gitService.todayOk(gitVO.getCommitter().getDate());
-				if(todayOk > 0) {
+				if(gitVO > 0) {
 					toOK.setUsername(username);
 					toOK.setReponame(reponame);
 					toOK.setMessage("완료");

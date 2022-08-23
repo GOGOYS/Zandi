@@ -20,6 +20,10 @@
 		color:white;
 		font-weight: 900;
 	}
+	
+	form{
+		width: 300px;
+	}
 </style>
 </head>
 <body>
@@ -30,24 +34,16 @@
 	</div>
 	
 	<h2>My Repo</h2>
-	<c:if test="${not empty REPOLIST}">
+	<c:if test="${not empty REPONAME}">
 		<div class="repo-container">
-			<c:forEach items="${REPOLIST}" var="REPO">
-				<div class="target repo-box" data-seq="${REPO.r_seq}">
-					<span>${REPO.r_reponame}</span>
+			<c:forEach items="${REPONAME}" var="REPO" varStatus="INDEX">
+				<div class="target repo-box" data-seq="${INDEX.count}">
+					<span>${INDEX.count}</span>
+					<span>${REPO}</span>
 				</div>
 			</c:forEach>
 		</div>
 	</c:if>
-
-
-	<form method="POST">
-		<fieldset>
-			<legend>repository add</legend>
-			<input name="repo" placeholder="github repository 이름을 입력하세요">
-			<button>add</button>
-		</fieldset>
-	</form>
 
 </body>
 <script>

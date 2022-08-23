@@ -1,6 +1,7 @@
 package com.heavenstar.zandi.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -14,8 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.heavenstar.zandi.model.GitCommitVO;
-import com.heavenstar.zandi.model.ReadmeVO;
-import com.heavenstar.zandi.model.RepoVO;
+import com.heavenstar.zandi.model.RepoListVO;
 import com.heavenstar.zandi.model.UserVO;
 import com.heavenstar.zandi.service.GitService;
 import com.heavenstar.zandi.service.RepoService;
@@ -34,73 +34,59 @@ public class GitController {
 	@Autowired
 	private UserService userService;
 	
-	@Autowired
-	private RepoService repoService;
-	
 	@RequestMapping(value={"/",""},method=RequestMethod.GET)
-	public String home(HttpSession session, Model model){
+	public String home(HttpSession session, Model model)throws IOException, ParseException{
 		
 		UserVO username = (UserVO)session.getAttribute("USER");
 		
-		List<RepoVO> repoList = repoService.findByAllRepo(username.username);
-		if(!(repoList == null)) {
-			model.addAttribute("REPOLIST",repoList);
-		}
+		/*
+		 * List<RepoVO> repoList = repoService.findByAllRepo(username.username);
+		 * if(!(repoList == null)) { model.addAttribute("REPOLIST",repoList); }
+		 */
 		
 		model.addAttribute("USER",username);
 		
+		List<RepoListVO> getlist =gitService.getRepoList(username.username);
+		
+		List<String> repoList = new ArrayList<>();
+		for(int i =0; i<getlist.size(); i++) {
+			
+			String reponame = getlist.get(i).name;
+			repoList.add(reponame);
+		}
+		log.debug("아아:{}",repoList);
+		model.addAttribute("REPONAME",repoList);
+		
 		return "git/home";
 	}
-	
-	@RequestMapping(value={"","/"},method=RequestMethod.POST)
-	public String home(String repo, HttpSession session) throws IOException, ParseException{
-		
-		UserVO username = (UserVO)session.getAttribute("USER");
-		
-		RepoVO repoVO = new RepoVO();
-		
-		repoVO.setR_username(username.username);
-		repoVO.setR_reponame(repo);
-		log.debug(repoVO.toString());
-		
-		
-		repoService.insert(repoVO);
-		
 
-		return "redirect:/git";
-	}
 	
 	@RequestMapping(value="/detail_repo/{seq}",method=RequestMethod.GET)
-	public String detail_repo(@PathVariable("seq") String r_seq, Model model)throws IOException, ParseException {
+	public String detail_repo(@PathVariable("seq") String seq, Model model,HttpSession session )throws IOException, ParseException {
 		
+		UserVO username = (UserVO)session.getAttribute("USER");
+		int intSeq = Integer.valueOf(seq);
 		
-		long longSeq = Long.valueOf(r_seq);
+		List<RepoListVO> repoList = gitService.getRepoList(username.username);
 		
-		RepoVO repoVO = repoService.findByOneRepo(longSeq);
-		
-		//한개 커밋 가져오기
-		GitCommitVO gitVO = gitService.oneCommit(repoVO.getR_username(),repoVO.getR_reponame());
-		gitVO.setReponame(repoVO.getR_reponame());
-		
-		
-		int todayOk = gitService.todayOk(gitVO.getCommitter().getDate());
-		if(todayOk > 0) {
-			model.addAttribute("TODAYOK","OK");
-		}else {
-			model.addAttribute("TODAYOK","NO");
-			
+		for(int i=1; i< repoList.size(); i++) {
+			if(i == intSeq) {
+				String reponame = repoList.get(i).name;
+				int gitOk = gitService.CommitOk(username.username, reponame);
+				if(gitOk > 0) {
+					model.addAttribute("TODAYOK","OK");
+				}else {
+					model.addAttribute("TODAYOK","NO");
+					
+				}
+				List<GitCommitVO> gitList = gitService.allCommit(username.username, reponame);
+				model.addAttribute("GITLIST",gitList);
+				
+			}
 		}
-		model.addAttribute("REPO",gitVO);
 		
-		//리드미 가져오기
-		//ReadmeVO readmeVO = gitService.getReadme(repoVO.getR_username(),repoVO.getR_reponame());
-		//model.addAttribute("README",readmeVO);
+	
 		
-		//여러개 커밋 가져오기
-		List<GitCommitVO> gitList = gitService.allCommit(repoVO.getR_username(),repoVO.getR_reponame());
-		model.addAttribute("GITLIST",gitList);
-		
-		//gitService.readmeTransate(readmeVO.getContent());
 		
 		return "git/detail_repo";
 	}

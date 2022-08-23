@@ -8,15 +8,20 @@ import org.json.simple.parser.ParseException;
 
 import com.heavenstar.zandi.model.GitCommitVO;
 import com.heavenstar.zandi.model.ReadmeVO;
+import com.heavenstar.zandi.model.RepoListVO;
 
 public interface GitService {
 	
-	//깃 하나 가져올때
-	public GitCommitVO oneCommit(String id, String repo) throws IOException, ParseException;
+	//오늘 커밋 했는지 확인
+	public int CommitOk(String id, String repo) throws IOException, ParseException;
+	// 리드미 가져올때
 	public ReadmeVO getReadme(String id, String repo) throws IOException, ParseException;
 	
 	// 모든 깃 가져올때
 	public List<GitCommitVO> allCommit(String id, String repo) throws IOException, ParseException;
+	
+	
+	public List<RepoListVO> getRepoList(String username)throws IOException, ParseException;
 	
 	// 커밋 날짜 변환
 	public String dataTransate(String date);

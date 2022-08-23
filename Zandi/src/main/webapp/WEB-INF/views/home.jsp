@@ -60,7 +60,7 @@
 			<c:otherwise>
 				<div class="menu-container">
 					<a href="${rootPath}/git">레파지토리</a>
-					<a href="${rootPath}/group">그룹</a>
+					<a href="${rootPath}/group">스터디</a>
 					<a href="${rootPath}/user/logout">로그아웃</a>
 				</div>
 			</c:otherwise>
