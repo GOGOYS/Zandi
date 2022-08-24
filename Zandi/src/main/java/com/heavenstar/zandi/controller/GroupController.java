@@ -36,7 +36,7 @@ public class GroupController {
 	private GitService gitService;
 	
 	@RequestMapping(value={"/",""},method=RequestMethod.GET)
-	public String group(HttpSession session  ,Model model) {
+	public String group(Model model) {
 		
 		List<GroupVO> groupList = groupService.selectAll();
 		
@@ -61,12 +61,13 @@ public class GroupController {
 	@RequestMapping(value="/group_in/{g_seq}",method=RequestMethod.GET)
 	public String group_in(@PathVariable("g_seq") String g_seq, HttpSession session, Model model ) throws IOException, ParseException {
 		
-		UserVO userVO = (UserVO)session.getAttribute("USER");
+		UserVO user = (UserVO)session.getAttribute("USER");
+		String userName = user.u_username;
 		long longSeq = Long.valueOf(g_seq);
 		GroupVO groupName = groupService.findByGroup(longSeq);
 		GroupVO group = new GroupVO();
 		group.setJ_gname(groupName.getG_name());
-		group.setJ_username(userVO.username);
+		group.setJ_username(userName);
 		
 		List<GroupVO> peopleList = groupService.findByGroupPeople(groupName.getG_name());
 		
@@ -95,7 +96,7 @@ public class GroupController {
 		
 		//입장 처리
 		for(int i =0; i < peopleList.size(); i++) {	
-			if(peopleList.get(i).getJ_username().equals(userVO.username)) {
+			if(peopleList.get(i).getJ_username().equals(userName)) {
 				model.addAttribute("GROUP",groupName);
 				model.addAttribute("PEOPLELIST",peopleList);
 				return "/group/group_in";
@@ -107,8 +108,9 @@ public class GroupController {
 		}
 		
 		
-		//한명도 가입 안되었으면 0넣고,
-		//그 다음부터 가입하면 1씩 증가
+
+		//가입 인원이 들어오면 g_inpeople에 1씩 증가하여
+		//인원수 카운트 늘리기
 		int count = groupName.getG_inpeople();
 			count += 1;
 			groupName.setG_inpeople(count);
@@ -125,25 +127,30 @@ public class GroupController {
 		
 	}
 	
-	@RequestMapping(value="/group_in/{g_seq}",method=RequestMethod.POST)
-	public String repo_in(@PathVariable("g_seq") String g_seq, String j_userrepo, HttpSession session, HttpServletRequest req) {
-		
-		UserVO userVO = (UserVO)session.getAttribute("USER");
-		long longSeq = Long.valueOf(g_seq);
-		GroupVO groupName = groupService.findByGroup(longSeq);
-		
-		log.debug("아아:{}",groupName.getG_name());
-		GroupVO upGroup = groupService.findByOnePeople(groupName.getG_name(), userVO.getUsername());
-		
-		upGroup.setJ_userrepo(j_userrepo);
-		
-		log.debug("아이아아ㅣ:{}",upGroup);
-		groupService.update(upGroup);
-		
-		
-		return "redirect:/group/group_in/"+ g_seq;
-	}
+
 	
+	@RequestMapping(value="/out/{g_seq}",method=RequestMethod.GET)
+	public String groupOut(@PathVariable("g_seq") String g_seq, HttpSession session) {
+		
+		UserVO user = (UserVO)session.getAttribute("USER");
+		String userName = user.u_username;
+		long longSeq = Long.valueOf(g_seq);
+		
+		GroupVO groupVO = groupService.findByGroup(longSeq);
+		String groupName = groupVO.getG_name();
+		GroupVO people = groupService.findByOnePeople(groupName, userName);
+		groupService.deletePeople(people.getJ_seq());
+		
+		
+		//가입 인원이 들어오면 g_inpeople에 1씩 감소하여
+		//인원수 카운트 줄이기
+		int count = groupVO.getG_inpeople();
+		count -= 1;
+		groupVO.setG_inpeople(count);
+		groupService.updateCount(groupVO);
+		
+		return "redirect:/group";
+	}
 
 	
 }

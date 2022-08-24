@@ -30,11 +30,9 @@ public class UserController {
 	@RequestMapping(value="/join",method=RequestMethod.POST)
 	public String join(UserVO userVO, Model model) {
 		
-		UserVO joinVO = userService.findById(userVO.username);
+		UserVO joinVO = userService.findByName(userVO.u_username);
 		
 		if(joinVO == null) {
-			
-			log.debug("아아아아:{}",userVO);
 			userService.insert(userVO);
 			
 			return "redirect:/user/login";
@@ -51,18 +49,24 @@ public class UserController {
 	@RequestMapping(value="/login",method=RequestMethod.POST)
 	public String login(UserVO userVO,Model model, HttpSession session) {
 		
-		UserVO user = userService.findById(userVO.username);
 		
+		
+		UserVO user = userService.findByName(userVO.u_username);
+		
+		log.debug("로그인:{}",userVO);
 		if(user == null) {
+			log.debug("아이디가 틀렸음:{}",user);
 			model.addAttribute("error","LOGIN_FAIL");
 			return "user/login";
 		}
 		
-		if(user.password.equals(userVO.password)) {
+		if(user.u_password.equals(userVO.u_password)) {
+			log.debug("비밀번호 맞음",user);
 			session.setAttribute("USER", userVO);
 			return "redirect:/";
 		}
 		
+		log.debug("비밀번호 틀림",user);
 		model.addAttribute("error","LOGIN_FAIL");
 		return "user/login";
 	}

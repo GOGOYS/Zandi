@@ -1,7 +1,22 @@
 package com.heavenstar.zandi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RepoListVO {
 	
 	public String id;
@@ -95,7 +110,8 @@ public class RepoListVO {
     public String archived;
     public String disabled;
     public String open_issues_count;
-    public String license;
+    @JsonProperty("license")
+    public static String license;
     public String allow_forking;
     public String is_template;
     public String web_commit_signoff_required;

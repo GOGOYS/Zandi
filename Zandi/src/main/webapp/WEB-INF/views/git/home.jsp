@@ -30,8 +30,19 @@
 	<h1>My Zandi</h1>
 	
 	<div class="zandi-img">
-		<img src="https://ghchart.rshah.org/${USER.username}" />
+		<img src="https://ghchart.rshah.org/${USER.u_github_id}" />
 	</div>
+	
+	<c:if test="${TODAYOK == 'OK' }" >
+		<div class="repo-container">
+	 		<span> 오늘의 커밋 완료</span>
+	 	</div>
+	</c:if>
+	<c:if test="${TODAYOK == 'NO' }" >
+		<div class="repo-container">
+	 		<span>오늘의 커밋 미완료</span>
+	 	</div>
+	</c:if>
 	
 	<h2>My Repo</h2>
 	<c:if test="${not empty REPONAME}">
@@ -44,6 +55,8 @@
 			</c:forEach>
 		</div>
 	</c:if>
+	
+	<a href="${rootPath}/">홈으로 가기</a>
 
 </body>
 <script>

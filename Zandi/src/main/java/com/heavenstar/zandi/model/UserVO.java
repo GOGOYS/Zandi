@@ -17,10 +17,10 @@ import lombok.ToString;
 @ToString
 public class UserVO {
 	
-	public String username;
-	public String password;
-	public String nickname;
-	public String email;
+	public String u_username;
+	public String u_password;
+	public String u_github_id;
+	public String u_email;
 	
 	List<GitCommitVO> gitList;
 

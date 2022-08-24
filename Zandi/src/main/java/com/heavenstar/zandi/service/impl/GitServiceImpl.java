@@ -21,6 +21,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.heavenstar.zandi.model.GitCommitVO;
 import com.heavenstar.zandi.model.ReadmeVO;
@@ -234,9 +235,9 @@ public class GitServiceImpl implements GitService{
 
 
 	@Override
-	public List<RepoListVO> getRepoList(String username) throws IOException, ParseException{
+	public List<RepoListVO> getRepoList(String u_github_id) throws IOException, ParseException{
 		
-		String url = " https://api.github.com/users/" + username+ "/repos";
+		String url = " https://api.github.com/users/" + u_github_id + "/repos?per_page=100";
 		
 		//파일 읽어들이기
         URL realUrl = new URL(url);
@@ -273,6 +274,7 @@ public class GitServiceImpl implements GitService{
 	        String json = obj.toString();
 	        
 	        ObjectMapper mapper = new ObjectMapper();
+	        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	        RepoListVO repoVO = mapper.readValue(json, RepoListVO.class);
 	        	        
 	        repoList.add(repoVO);

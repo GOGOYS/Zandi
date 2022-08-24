@@ -18,7 +18,6 @@ import com.heavenstar.zandi.model.GitCommitVO;
 import com.heavenstar.zandi.model.RepoListVO;
 import com.heavenstar.zandi.model.UserVO;
 import com.heavenstar.zandi.service.GitService;
-import com.heavenstar.zandi.service.RepoService;
 import com.heavenstar.zandi.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -37,24 +36,30 @@ public class GitController {
 	@RequestMapping(value={"/",""},method=RequestMethod.GET)
 	public String home(HttpSession session, Model model)throws IOException, ParseException{
 		
-		UserVO username = (UserVO)session.getAttribute("USER");
+		UserVO user = (UserVO)session.getAttribute("USER");
+		UserVO userVO =userService.findByName(user.u_username);
+		String gitName = userVO.getU_github_id();
 		
-		/*
-		 * List<RepoVO> repoList = repoService.findByAllRepo(username.username);
-		 * if(!(repoList == null)) { model.addAttribute("REPOLIST",repoList); }
-		 */
+		model.addAttribute("USER",userVO);
 		
-		model.addAttribute("USER",username);
-		
-		List<RepoListVO> getlist =gitService.getRepoList(username.username);
+		List<RepoListVO> getlist =gitService.getRepoList(gitName);
 		
 		List<String> repoList = new ArrayList<>();
+		int gitOk =0;
 		for(int i =0; i<getlist.size(); i++) {
 			
 			String reponame = getlist.get(i).name;
 			repoList.add(reponame);
+			
+			gitOk += gitService.CommitOk(gitName, reponame);			
 		}
-		log.debug("아아:{}",repoList);
+		
+		//오늘의 커밋 검사
+		if(gitOk > 0) {
+			model.addAttribute("TODAYOK","OK");
+		}else {
+			model.addAttribute("TODAYOK","NO");	
+		}
 		model.addAttribute("REPONAME",repoList);
 		
 		return "git/home";
@@ -64,22 +69,25 @@ public class GitController {
 	@RequestMapping(value="/detail_repo/{seq}",method=RequestMethod.GET)
 	public String detail_repo(@PathVariable("seq") String seq, Model model,HttpSession session )throws IOException, ParseException {
 		
-		UserVO username = (UserVO)session.getAttribute("USER");
+		UserVO user = (UserVO)session.getAttribute("USER");
+		UserVO userVO =userService.findByName(user.u_username);
+		String gitName = userVO.getU_github_id();
 		int intSeq = Integer.valueOf(seq);
+		intSeq -= 1;
 		
-		List<RepoListVO> repoList = gitService.getRepoList(username.username);
+		List<RepoListVO> repoList = gitService.getRepoList(gitName);
 		
-		for(int i=1; i< repoList.size(); i++) {
+		for(int i=0; i< repoList.size(); i++) {
 			if(i == intSeq) {
 				String reponame = repoList.get(i).name;
-				int gitOk = gitService.CommitOk(username.username, reponame);
+				int gitOk = gitService.CommitOk(gitName, reponame);
 				if(gitOk > 0) {
 					model.addAttribute("TODAYOK","OK");
 				}else {
 					model.addAttribute("TODAYOK","NO");
 					
 				}
-				List<GitCommitVO> gitList = gitService.allCommit(username.username, reponame);
+				List<GitCommitVO> gitList = gitService.allCommit(gitName, reponame);
 				model.addAttribute("GITLIST",gitList);
 				
 			}

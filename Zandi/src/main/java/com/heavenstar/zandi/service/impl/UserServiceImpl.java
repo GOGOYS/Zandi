@@ -24,15 +24,15 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public UserVO findById(String username) {
+	public UserVO findById(String u_seq) {
 		// TODO Auto-generated method stub
-		return userDao.findById(username);
+		return userDao.findById(u_seq);
 	}
 
 	@Override
-	public UserVO findByName(String nickname) {
+	public UserVO findByName(String u_username) {
 		// TODO Auto-generated method stub
-		return userDao.findByName(nickname);
+		return userDao.findByName(u_username);
 	}
 	@Override
 	public int insert(UserVO userVO) {
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public int delete(String username) {
+	public int delete(String u_seq) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

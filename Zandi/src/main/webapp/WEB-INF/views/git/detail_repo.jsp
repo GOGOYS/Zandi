@@ -12,15 +12,14 @@
 	
 	<div>레파지토리 이름: ${REPO.reponame}</div>
 	<div>README : ${README.content}</div>
-	<h3>커밋 한개</h3>
 	<c:if test="${TODAYOK == 'OK' }" >
 		<div class="repo-container">
-	 		<span>오늘의 커밋 완료</span>
+	 		<span>${REPO.reponame}의 오늘 커밋 완료</span>
 	 	</div>
 	</c:if>
 	<c:if test="${TODAYOK == 'NO' }" >
 		<div class="repo-container">
-	 		<span>오늘의 커밋 미완료</span>
+	 		<span>${REPO.reponame}의 오늘 커밋 미완료</span>
 	 	</div>
 	</c:if>
 
@@ -29,5 +28,7 @@
 	 		<div>커밋 날짜 : ${GITLIST.committer.date}</div>
 			<div>깃 내용 : ${GITLIST.message}</div>
 	</c:forEach>
+	
+	<a href="${rootPath}/git">RepoList 가기</a>
 </body>
 </html>

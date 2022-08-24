@@ -8,7 +8,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
-	.container{
+	.in-container-box{
 		background-color: green;
 		border-radius: 8px;
 		width: 300px;
@@ -16,8 +16,9 @@
 		margin-bottom:6px;
 	}
 	
-	form{
-		width:300px;
+	.form-box{
+		width:500px;
+		margin-top:10px;
 	}
 	
 	fieldset{
@@ -25,27 +26,41 @@
 		flex-direction: column;
 	}
 	
+	.input-container{
+		width:100%;
+	}
+	
+	input[name="g_name"]{
+		width:220px;
+	}
+	
 </style>
 </head>
 <body>
-	<div class="container">
+	<div class="wrap-container">
 		<h1>STUDY LIST</h1>
 		<c:forEach items="${GROUPLIST}" var="GROUP">
-			<div class="container">
+			<div class="in-container-box">
 				<div>스터디방 : ${GROUP.g_name}</div>
 				<div>참여 인원 : ${GROUP.g_inpeople} / ${GROUP.g_people}</div>
 				<a href="${rootPath}/group/group_in/${GROUP.g_seq}">참가하기</a>		
 			</div>		
 		</c:forEach>
 
-		<form method="POST" >
+		<form class="form-box" method="POST" >
 			<fieldset>
 				<legend>스터디 생성하기</legend>
-				<input name="g_name" placeholder="생성할 그룹 이름을 입력하세요">
-				<input name="g_people" type="number" placeholder="2~20명 까지 인원제한을 정해주세요" min="2" max="20" >
+				<div class="input-container">
+						<label>스터디 이름 </label>
+						<input name="g_name" placeholder="생성할 그룹 이름을 입력하세요">
+						<label>인원제한 </label>
+						<input name="g_people" type="number"  value="4" min="4" max="20" >
+				</div>
 				<button>생성</button>
 			</fieldset> 
 		</form>
+		
+		<a href="${rootPath}/">홈으로 가기</a>
 	</div>
 </body>
 </html>
