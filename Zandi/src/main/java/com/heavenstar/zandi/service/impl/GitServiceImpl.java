@@ -19,10 +19,12 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.heavenstar.zandi.config.Config;
 import com.heavenstar.zandi.model.GitCommitVO;
 import com.heavenstar.zandi.model.ReadmeVO;
 import com.heavenstar.zandi.model.RepoListVO;
@@ -35,18 +37,21 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class GitServiceImpl implements GitService{
 	
+	
 
 	@Override
 	public int CommitOk(String id, String repo) throws IOException, ParseException {
 		//가장 최근 커밋
 		
-		
+		String token = Config.TOKEN;
 		String url = " https://api.github.com/repos/" + id + "/" + repo + "/commits";
+		
 		
 		//파일 읽어들이기
         URL realUrl = new URL(url);
         HttpURLConnection conn = (HttpURLConnection) realUrl.openConnection();
         conn.setRequestMethod("GET");
+        conn.setRequestProperty("Authorization", token);
         conn.setRequestProperty("Content-type", "application/json");
         BufferedReader rd;
         if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
@@ -237,12 +242,14 @@ public class GitServiceImpl implements GitService{
 	@Override
 	public List<RepoListVO> getRepoList(String u_github_id) throws IOException, ParseException{
 		
+		String token = Config.TOKEN;
 		String url = " https://api.github.com/users/" + u_github_id + "/repos?per_page=100";
 		
 		//파일 읽어들이기
         URL realUrl = new URL(url);
         HttpURLConnection conn = (HttpURLConnection) realUrl.openConnection();
         conn.setRequestMethod("GET");
+        conn.setRequestProperty("Authorization", token);
         conn.setRequestProperty("Content-type", "application/json");
         BufferedReader rd;
         if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
