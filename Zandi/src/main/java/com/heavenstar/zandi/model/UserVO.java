@@ -17,6 +17,7 @@ import lombok.ToString;
 @ToString
 public class UserVO {
 	
+	public Long u_seq;
 	public String u_username;
 	public String u_password;
 	public String u_github_id;

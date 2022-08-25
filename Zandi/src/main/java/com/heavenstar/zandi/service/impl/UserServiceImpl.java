@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService{
 		// TODO Auto-generated method stub
 		return userDao.findByName(u_username);
 	}
+	
 	@Override
 	public int insert(UserVO userVO) {
 		// TODO Auto-generated method stub

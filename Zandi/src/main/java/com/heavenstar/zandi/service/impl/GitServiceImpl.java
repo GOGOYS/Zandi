@@ -90,7 +90,7 @@ public class GitServiceImpl implements GitService{
 	    GitCommitVO gitVO = mapper.readValue(respData, GitCommitVO.class);
 		
         // 날짜 변환
-        String transDate = dataTransate(gitVO.commit.committer.getDate());
+        String transDate = dataTransate(gitVO.commit.author.getDate());
         gitVO.commit.author.setDate(transDate);
                 
         int result = todayOk(transDate);
@@ -151,7 +151,7 @@ public class GitServiceImpl implements GitService{
         	ObjectMapper mapper = new ObjectMapper();
         	String respData = mapper.writeValueAsString(resData.getBody().get(i));
         	GitCommitVO gitVO = mapper.readValue(respData, GitCommitVO.class);
-	        String transDate = dataTransate(gitVO.commit.committer.getDate());
+	        String transDate = dataTransate(gitVO.commit.author.getDate());
 	        gitVO.commit.author.setDate(transDate);
 	        gitList.add(gitVO);
 	        
@@ -249,6 +249,7 @@ public class GitServiceImpl implements GitService{
 		String today = dateFormat.format(curDate);
 		
 		if(result[0].equals(today)) {
+
 			return 1;
 		}
 		

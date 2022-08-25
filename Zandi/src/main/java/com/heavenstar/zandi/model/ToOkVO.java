@@ -16,7 +16,6 @@ import lombok.ToString;
 public class ToOkVO {
 	
 	private String username;
-	private String reponame;
 	private String message;
 
 }

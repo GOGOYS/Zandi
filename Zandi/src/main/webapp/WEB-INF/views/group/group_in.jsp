@@ -31,7 +31,7 @@
 	
 	<c:forEach items="${TOOK}" var="TOOK">
 		<div>
-			<div>${TOOK.username}님의 ${TOOK.reponame}</div>
+			<div>${TOOK.username}님의</div>
 			<div>오늘 커밋 : ${TOOK.message}</div>
 		</div>
 	</c:forEach>

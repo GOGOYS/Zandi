@@ -29,6 +29,7 @@
 			<div>깃 내용 : ${GITLIST.commit.message}</div>
 	</c:forEach>
 	
-	<a href="${rootPath}/git">RepoList 가기</a>
+	<a href="${rootPath}/zandi/git">RepoList 가기</a>
+	<a href="${rootPath}/">Home 가기</a>
 </body>
 </html>

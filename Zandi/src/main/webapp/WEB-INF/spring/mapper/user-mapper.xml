@@ -28,11 +28,7 @@
 			#{u_github_id},
 			#{u_email}
 		)
-		
  	</insert>
- 	
-
- 	
  	
  	<update id="update" parameterType="UserVO">
  		UPDATE tbl_users

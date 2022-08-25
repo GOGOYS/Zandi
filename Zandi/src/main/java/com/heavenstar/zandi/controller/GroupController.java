@@ -70,36 +70,31 @@ public class GroupController {
 		group.setJ_username(userName);
 		
 		List<GroupVO> peopleList = groupService.findByGroupPeople(groupName.getG_name());
+		log.debug("아악:{}",peopleList);
 		
 		//오늘 커밋 완료 처리
 		List<ToOkVO> okList = new ArrayList<>();
-		List<String> userList = new ArrayList<>();
+		int gitOk = 0;
 		for(int i =0; i < peopleList.size(); i++) {
+			ToOkVO toOK = new ToOkVO();
 			String username = peopleList.get(i).getJ_username();
-			userList.add(username);
+			toOK.setUsername(username);
 			List<RepoListVO> repoList = gitService.getRepoList(username);
 			
-			int gitOk;
 			
 			for(int j =0; j< repoList.size(); j++) {
 				String repoName = repoList.get(j).getName();
-				gitOk = gitService.CommitOk(username, repoName);
+				gitOk += gitService.CommitOk(username, repoName);
 				
-				ToOkVO toOK = new ToOkVO();
-				if(gitOk > 0) {
-					toOK.setUsername(username);
-					toOK.setReponame(repoName);
-					toOK.setMessage("완료");
-					okList.add(toOK);
-				}else {
-					toOK.setUsername(username);
-					toOK.setReponame(repoName);
-					toOK.setMessage("미완료");
-					okList.add(toOK);
-				}
 			}	
+			if(gitOk > 0) {
+				toOK.setMessage("완료");
+			}else {
+				toOK.setMessage("미완료");
+			}
+			okList.add(toOK);
+			log.debug("투브이오:{}",toOK);
 		}
-		model.addAttribute("TOOK",okList);
 		
 		
 		
@@ -108,7 +103,7 @@ public class GroupController {
 		for(int i =0; i < peopleList.size(); i++) {	
 			if(peopleList.get(i).getJ_username().equals(userName)) {
 				model.addAttribute("GROUP",groupName);
-				model.addAttribute("PEOPLELIST",peopleList);
+				model.addAttribute("TOOK",okList);
 				return "/group/group_in";
 			}			
 		}
@@ -128,7 +123,7 @@ public class GroupController {
 
 		groupService.insertPeople(group);
 		model.addAttribute("GROUP",groupName);
-		model.addAttribute("PEOPLELIST",peopleList);
+		model.addAttribute("TOOK",okList);
 		
 		return "redirect:/group/group_in";
 		

@@ -33,7 +33,11 @@ public class UserController {
 	@RequestMapping(value="/join",method=RequestMethod.POST)
 	public String join(UserVO userVO, Model model) {
 		
-		UserVO joinVO = userService.findByName(userVO.u_username);
+		log.debug("확인1:{}",userVO.getU_username());
+		log.debug("확인2:{}",userVO.u_username);
+		UserVO joinVO = userService.findByName(userVO.getU_username());
+		log.debug("확인3:{}",joinVO);
+		
 		
 		if(joinVO == null) {
 			userService.insert(userVO);
