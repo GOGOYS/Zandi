@@ -12,16 +12,18 @@ import com.heavenstar.zandi.model.RepoListVO;
 
 public interface GitService {
 	
-	//오늘 커밋 했는지 확인
+	//레포 리트스 가져오기
+	public List<RepoListVO> getRepoList(String username)throws IOException, ParseException;
+	
+	//커밋 가져와서 오늘 커밋 확인
 	public int CommitOk(String id, String repo) throws IOException, ParseException;
+	
 	// 리드미 가져올때
 	public ReadmeVO getReadme(String id, String repo) throws IOException, ParseException;
 	
 	// 모든 깃 가져올때
 	public List<GitCommitVO> allCommit(String id, String repo) throws IOException, ParseException;
 	
-	
-	public List<RepoListVO> getRepoList(String username)throws IOException, ParseException;
 	
 	// 커밋 날짜 변환
 	public String dataTransate(String date);
@@ -31,5 +33,6 @@ public interface GitService {
 	
 	//리드미 변환
 	public String readmeTransate(String readme)throws UnsupportedEncodingException;
+	
 	
 }

@@ -66,15 +66,15 @@ public class GroupServiceImpl implements GroupService{
 	}
 
 	@Override
-	public int delete(String g_name) {
+	public int delete(long g_seq) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int deletePeople(String j_username) {
+	public int deletePeople(long j_seq) {
 		// TODO Auto-generated method stub
-		return 0;
+		return groupDao.deletePeople(j_seq);
 	}
 
 	@Override

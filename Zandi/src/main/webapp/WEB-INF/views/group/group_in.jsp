@@ -7,15 +7,27 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+	.people-container{
+		display: flex;
+		width:500px;
+	}
+	
+	.people{
+		margin-right: 10px;
+	}
+</style>
 </head>
 <body>
 
 	<h1>${GROUP.g_name}의 스터디 룸</h1>
 	
-	<div>참여인원</div>
-	<c:forEach items="${PEOPLELIST}" var="PEOPLE">
-		<div>${PEOPLE.j_username}</div>
-	</c:forEach>
+	<h3>참여인원</h3>
+	<div class="people-container">
+		<c:forEach items="${PEOPLELIST}" var="PEOPLE">
+			<div class="people">${PEOPLE.j_username}</div>
+		</c:forEach>
+	</div>
 	
 	<c:forEach items="${TOOK}" var="TOOK">
 		<div>

@@ -49,9 +49,10 @@ public class GitController {
 		for(int i =0; i<getlist.size(); i++) {
 			
 			String reponame = getlist.get(i).name;
-			repoList.add(reponame);
-			
-			gitOk += gitService.CommitOk(gitName, reponame);			
+			if(reponame != null) {
+				repoList.add(reponame);				
+			}
+			//gitOk += gitService.CommitOk(gitName, reponame);			
 		}
 		
 		//오늘의 커밋 검사

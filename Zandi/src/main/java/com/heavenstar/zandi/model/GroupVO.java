@@ -21,7 +21,7 @@ public class GroupVO {
 	public int g_inpeople;
 	public String g_enddate;
 	
-	private String j_seq;
+	private long j_seq;
 	private String j_gname;
 	private String j_username;
 	private String j_userrepo;

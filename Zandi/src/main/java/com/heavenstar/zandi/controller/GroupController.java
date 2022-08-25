@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.parser.ParseException;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.heavenstar.zandi.model.GitCommitVO;
 import com.heavenstar.zandi.model.GroupVO;
+import com.heavenstar.zandi.model.RepoListVO;
 import com.heavenstar.zandi.model.ToOkVO;
 import com.heavenstar.zandi.model.UserVO;
 import com.heavenstar.zandi.service.GitService;
@@ -72,27 +72,37 @@ public class GroupController {
 		List<GroupVO> peopleList = groupService.findByGroupPeople(groupName.getG_name());
 		
 		//오늘 커밋 완료 처리
-		List<ToOkVO> gitList = new ArrayList<>();
+		List<ToOkVO> okList = new ArrayList<>();
+		List<String> userList = new ArrayList<>();
 		for(int i =0; i < peopleList.size(); i++) {
 			String username = peopleList.get(i).getJ_username();
-			String reponame = peopleList.get(i).getJ_userrepo();
-			if(reponame != null) {
-				int  gitVO =gitService.CommitOk(username, reponame);
+			userList.add(username);
+			List<RepoListVO> repoList = gitService.getRepoList(username);
+			
+			int gitOk;
+			
+			for(int j =0; j< repoList.size(); j++) {
+				String repoName = repoList.get(j).getName();
+				gitOk = gitService.CommitOk(username, repoName);
+				
 				ToOkVO toOK = new ToOkVO();
-				if(gitVO > 0) {
+				if(gitOk > 0) {
 					toOK.setUsername(username);
-					toOK.setReponame(reponame);
+					toOK.setReponame(repoName);
 					toOK.setMessage("완료");
-					gitList.add(toOK);
+					okList.add(toOK);
 				}else {
 					toOK.setUsername(username);
-					toOK.setReponame(reponame);
+					toOK.setReponame(repoName);
 					toOK.setMessage("미완료");
-					gitList.add(toOK);
-				}		
-			}
+					okList.add(toOK);
+				}
+			}	
 		}
-		model.addAttribute("TOOK",gitList);
+		model.addAttribute("TOOK",okList);
+		
+		
+		
 		
 		//입장 처리
 		for(int i =0; i < peopleList.size(); i++) {	
@@ -103,7 +113,7 @@ public class GroupController {
 			}			
 		}
 		if(peopleList.size() >= groupName.getG_people()) {
-			model.addAttribute("MESSAGE","FULL_IN");
+			model.addAttribute("MESSAGE",g_seq);
 			return "redirect:/group";
 		}
 		
@@ -117,9 +127,6 @@ public class GroupController {
 			groupService.updateCount(groupName);
 
 		groupService.insertPeople(group);
-		
-		
-		
 		model.addAttribute("GROUP",groupName);
 		model.addAttribute("PEOPLELIST",peopleList);
 		
@@ -151,6 +158,7 @@ public class GroupController {
 		
 		return "redirect:/group";
 	}
+	
 
 	
 }

@@ -58,12 +58,12 @@
 			j_userrepo = #{j_userrepo}
 		WHERE j_seq = #{j_seq} 
  	</update>
- 	<delete id="delete" >
-		DELETE tbl_group WHERE g_seq = #{g_seq}
+ 	<delete id="delete" parameterType="GroupVO">
+		DELETE FROM tbl_group WHERE g_seq = #{g_seq}
  	</delete>
  	
- 	<delete id="deletePeople">
-		DELETE tbl_join_group WHERE j_seq = #{j_seq}
+ 	<delete id="deletePeople" parameterType="GroupVO">
+		DELETE FROM tbl_join_group WHERE j_seq = #{j_seq}
  	</delete>
  	
  	<select id="create_group_table">

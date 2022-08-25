@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.heavenstar.zandi.model.UserVO;
+import com.heavenstar.zandi.service.GitService;
 import com.heavenstar.zandi.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +22,10 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	
 	@RequestMapping(value="/join",method=RequestMethod.GET)
 	public String join() {
+		
 		
 		return null;
 	}

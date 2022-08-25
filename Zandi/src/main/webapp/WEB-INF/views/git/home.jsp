@@ -34,12 +34,12 @@
 	</div>
 	
 	<c:if test="${TODAYOK == 'OK' }" >
-		<div class="repo-container">
+		<div>
 	 		<span> 오늘의 커밋 완료</span>
 	 	</div>
 	</c:if>
 	<c:if test="${TODAYOK == 'NO' }" >
-		<div class="repo-container">
+		<div>
 	 		<span>오늘의 커밋 미완료</span>
 	 	</div>
 	</c:if>
@@ -63,5 +63,5 @@
 	const rootPath = "${rootPath}"
 </script>
 
-<script src="${rootPath}/static/js/repo.js?var=2022-08-22-001"></script>
+<script src="${rootPath}/static/js/repo.js?var=2022-08-25-002"></script>
 </html>
