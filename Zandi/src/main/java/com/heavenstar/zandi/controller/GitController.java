@@ -48,11 +48,10 @@ public class GitController {
 		int gitOk =0;
 		for(int i =0; i<getlist.size(); i++) {
 			
-			String reponame = getlist.get(i).name;
-			if(reponame != null) {
-				repoList.add(reponame);				
-			}
-			//gitOk += gitService.CommitOk(gitName, reponame);			
+			String repoName = getlist.get(i).name;	
+			repoList.add(repoName);
+			gitOk += gitService.CommitOk(gitName, repoName);
+			
 		}
 		
 		//오늘의 커밋 검사
@@ -80,15 +79,15 @@ public class GitController {
 		
 		for(int i=0; i< repoList.size(); i++) {
 			if(i == intSeq) {
-				String reponame = repoList.get(i).name;
-				int gitOk = gitService.CommitOk(gitName, reponame);
+				String repoName = repoList.get(i).name;
+				int gitOk = gitService.CommitOk(gitName, repoName);
 				if(gitOk > 0) {
 					model.addAttribute("TODAYOK","OK");
 				}else {
 					model.addAttribute("TODAYOK","NO");
 					
 				}
-				List<GitCommitVO> gitList = gitService.allCommit(gitName, reponame);
+				List<GitCommitVO> gitList = gitService.allCommit(gitName, repoName);
 				model.addAttribute("GITLIST",gitList);
 				
 			}

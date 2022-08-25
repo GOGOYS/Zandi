@@ -25,8 +25,8 @@
 
 	<h3>모든 커밋</h3>
 	<c:forEach items="${GITLIST}" var="GITLIST">
-	 		<div>커밋 날짜 : ${GITLIST.committer.date}</div>
-			<div>깃 내용 : ${GITLIST.message}</div>
+	 		<div>커밋 날짜 : ${GITLIST.commit.author.date}</div>
+			<div>깃 내용 : ${GITLIST.commit.message}</div>
 	</c:forEach>
 	
 	<a href="${rootPath}/git">RepoList 가기</a>

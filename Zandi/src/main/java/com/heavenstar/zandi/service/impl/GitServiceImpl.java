@@ -52,14 +52,65 @@ public class GitServiceImpl implements GitService{
 		//가장 최근 커밋
 		
 		String token = Config.TOKEN;
-		String url = " https://api.github.com/repos/" + id + "/" + repo + "/commits";
+		String url = "https://api.github.com/repos/" + id + "/" + repo + "/commits";
 		
 		URI restURI = null;
 		try {
 			restURI = new URI(url);
 		} catch (URISyntaxException e) {
 			// 연결이 되지 않음
-			return -1;
+			return 0;
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Authorization", "token "+ token);
+		
+		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+		
+		HttpEntity<String> entity = new HttpEntity<String>("parameter", headers);
+		
+		
+		RestTemplate restTemp = new RestTemplate();
+		
+		
+
+			ResponseEntity<JSONArray> resData = null;
+			
+			resData = restTemp.exchange(
+						restURI, 
+						HttpMethod.GET, 
+						entity,
+						new ParameterizedTypeReference<JSONArray>(){}
+						);
+		
+		String json = resData.getBody().get(0).toString();
+		
+		ObjectMapper mapper = new ObjectMapper();
+		String respData = mapper.writeValueAsString(resData.getBody().get(0));
+	    GitCommitVO gitVO = mapper.readValue(respData, GitCommitVO.class);
+		
+        // 날짜 변환
+        String transDate = dataTransate(gitVO.commit.committer.getDate());
+        gitVO.commit.author.setDate(transDate);
+                
+        int result = todayOk(transDate);
+
+		return result;
+	
+	}
+
+
+	@Override
+	public List<GitCommitVO> allCommit(String id, String repo) throws IOException, ParseException {
+
+		String token = Config.TOKEN;
+		String url = "https://api.github.com/repos/" + id + "/" + repo + "/commits";
+		
+		URI restURI = null;
+		try {
+			restURI = new URI(url);
+		} catch (URISyntaxException e) {
+			return null;
 		}
 
 		//Http 프로토콜에 보안정보를 세팅하여
@@ -84,75 +135,26 @@ public class GitServiceImpl implements GitService{
 		
 		//VO가 아닌 String형으로 수신할것이다.
 		//문자열 타입으로 그대로 수신한다
-			ResponseEntity<GitCommitVO> resData = null;
+			ResponseEntity<JSONArray> resData = null;
 			
 			resData = restTemp.exchange(
 						restURI, 
 						HttpMethod.GET, 
 						entity,
-						new ParameterizedTypeReference<GitCommitVO>(){}
+						new ParameterizedTypeReference<JSONArray>(){}
 						);
-		
-		
-		
-        // 날짜 변환 해서 커밋 했는지 가져오기
-        String transDate = dataTransate(resData.getBody().committer.getDate());
-        
-        resData.getBody().committer.setDate(transDate);
-        
-        int result = todayOk(resData.getBody().committer.getDate());
+			
+			List<GitCommitVO> gitList = new ArrayList<>();
 
-		return result;
-	
-	}
-
-
-	@Override
-	public List<GitCommitVO> allCommit(String id, String repo) throws IOException, ParseException {
-
-		String url = " https://api.github.com/repos/" + id + "/" + repo + "/commits";
-		
-		//파일 읽어들이기
-        URL realUrl = new URL(url);
-        HttpURLConnection conn = (HttpURLConnection) realUrl.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("Content-type", "application/json");
-        BufferedReader rd;
-        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
-            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        } else {
-            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-        }
-        
-        String retString = "";
-        String line;
-        while((line = rd.readLine()) != null) {
-        	retString += line;
-        }
-        rd.close();
-        conn.disconnect();
-        
-        
-        //문자열을  JSON 객체로 변환
-        JSONParser parse = new JSONParser();
-        JSONArray arr = (JSONArray)parse.parse(retString);
-        List<GitCommitVO> gitList = new ArrayList<>();
-        
-        for(int i =0; i < arr.size(); i++) {
+        for(int i =0; i < resData.getBody().size(); i++) {
         	
-	        JSONObject obj = (JSONObject)arr.get(i);
-	       
-	        JSONObject commit = (JSONObject)obj.get("commit");
-	        
-	        String json = commit.toString();
-	        
-	        ObjectMapper mapper = new ObjectMapper();
-	        GitCommitVO gitVO = mapper.readValue(json, GitCommitVO.class);
-	        
-	        String transDate = dataTransate(gitVO.committer.getDate());
-	        gitVO.committer.setDate(transDate);
-	        
+        	ObjectMapper mapper = new ObjectMapper();
+        	String respData = mapper.writeValueAsString(resData.getBody().get(i));
+        	GitCommitVO gitVO = mapper.readValue(respData, GitCommitVO.class);
+	        String transDate = dataTransate(gitVO.commit.committer.getDate());
+	        gitVO.commit.author.setDate(transDate);
 	        gitList.add(gitVO);
+	        
         }
         
 		return gitList;
@@ -298,7 +300,15 @@ public class GitServiceImpl implements GitService{
 						);
 			
 			
-			return resData.getBody();
+			List<RepoListVO> repoList = resData.getBody();
+			
+			for(int i =0; i< repoList.size(); i++) {
+				
+				if(repoList.get(i).name == null) {
+					repoList.remove(i);
+				}
+			}
+			return repoList;
 		
 	}
 	
