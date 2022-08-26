@@ -30,7 +30,7 @@
 	<h1>My Zandi</h1>
 	
 	<div class="zandi-img">
-		<img src="https://ghchart.rshah.org/${USER.u_github_id}?ver=2022-08-25-001" />
+		<img src="${IMAGE}" />
 	</div>
 	
 	<c:if test="${TODAYOK == 'OK' }" >

@@ -1,7 +1,9 @@
 package com.heavenstar.zandi.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -53,14 +55,13 @@ public class GitController {
 			gitOk += gitService.CommitOk(gitName, repoName);
 			
 		}
-		
-		//오늘의 커밋 검사
-		if(gitOk > 0) {
-			model.addAttribute("TODAYOK","OK");
-		}else {
-			model.addAttribute("TODAYOK","NO");	
-		}
 		model.addAttribute("REPONAME",repoList);
+		
+		String check = gitCheck(gitOk);
+		model.addAttribute("TODAYOK",check);
+		
+		String currentImg = currentImg(user.u_username);
+		model.addAttribute("IMAGE",currentImg);
 		
 		return "git/home";
 	}
@@ -81,22 +82,40 @@ public class GitController {
 			if(i == intSeq) {
 				String repoName = repoList.get(i).name;
 				int gitOk = gitService.CommitOk(gitName, repoName);
-				if(gitOk > 0) {
-					model.addAttribute("TODAYOK","OK");
-				}else {
-					model.addAttribute("TODAYOK","NO");
-					
-				}
+
+				String check = gitCheck(gitOk);
+				model.addAttribute("TODAYOK",check);
+				
 				List<GitCommitVO> gitList = gitService.allCommit(gitName, repoName);
 				model.addAttribute("GITLIST",gitList);
-				
+				model.addAttribute("REPONAME",repoName);
 			}
 		}
 		
-	
-		
-		
 		return "git/detail_repo";
+	}
+	
+	
+	// 오늘의 커밋 검사
+	public String gitCheck(int gitOk) {
+		
+		if(gitOk > 0) {
+			return "OK";
+		}else {
+			return "NO";	
+		}
+	}
+	
+	//이미지 src api 불러올때 매번 다르게 로드 되게
+	public String currentImg(String u_username) {
+		
+		Date curDate = new Date(System.currentTimeMillis());
+		SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
+		SimpleDateFormat timeFormat = new SimpleDateFormat("hh-mm-ss");
+		String date = dateFormat.format(curDate);
+		String time = timeFormat.format(curDate);
+		String img = "https://ghchart.rshah.org/"+ u_username + "?ver=" + date + "-" + time ;
+		return img;
 	}
 	
 	

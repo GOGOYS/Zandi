@@ -68,7 +68,7 @@ public class GroupServiceImpl implements GroupService{
 	@Override
 	public int delete(long g_seq) {
 		// TODO Auto-generated method stub
-		return 0;
+		return groupDao.delete(g_seq);
 	}
 
 	@Override

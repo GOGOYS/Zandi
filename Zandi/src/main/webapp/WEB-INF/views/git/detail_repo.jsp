@@ -10,16 +10,16 @@
 <body>
 	<h1>repo detail</h1>
 	
-	<div>레파지토리 이름: ${REPO.reponame}</div>
-	<div>README : ${README.content}</div>
+	<div>레파지토리 이름: ${REPONAME}</div>
+	<!-- <div>README : ${README.content}</div> -->	
 	<c:if test="${TODAYOK == 'OK' }" >
 		<div class="repo-container">
-	 		<span>${REPO.reponame}의 오늘 커밋 완료</span>
+	 		<span>${REPONAME}의 오늘 커밋 완료</span>
 	 	</div>
 	</c:if>
 	<c:if test="${TODAYOK == 'NO' }" >
 		<div class="repo-container">
-	 		<span>${REPO.reponame}의 오늘 커밋 미완료</span>
+	 		<span>${REPONAME}의 오늘 커밋 미완료</span>
 	 	</div>
 	</c:if>
 
@@ -30,6 +30,6 @@
 	</c:forEach>
 	
 	<a href="${rootPath}/zandi/git">RepoList 가기</a>
-	<a href="${rootPath}/">Home 가기</a>
+	<a href="${rootPath}/zandi">Home 가기</a>
 </body>
 </html>

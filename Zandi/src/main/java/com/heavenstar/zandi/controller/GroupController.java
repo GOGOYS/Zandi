@@ -49,8 +49,10 @@ public class GroupController {
 		
 		groupVO.setG_inpeople(0);
 		groupService.insert(groupVO);
+		List<GroupVO> groupList = groupService.selectAll();
+		int g_seq = groupList.size();
 		
-		return "redirect:/group";
+		return "redirect:/group/group_in/"+ g_seq;
 	}
 	@RequestMapping(value={"/list"},method=RequestMethod.GET)
 	public String grouplist() {
@@ -70,7 +72,7 @@ public class GroupController {
 		group.setJ_username(userName);
 		
 		List<GroupVO> peopleList = groupService.findByGroupPeople(groupName.getG_name());
-		log.debug("아악:{}",peopleList);
+		model.addAttribute("PEOPLELIST",peopleList);
 		
 		//오늘 커밋 완료 처리
 		List<ToOkVO> okList = new ArrayList<>();
@@ -93,7 +95,6 @@ public class GroupController {
 				toOK.setMessage("미완료");
 			}
 			okList.add(toOK);
-			log.debug("투브이오:{}",toOK);
 		}
 		
 		
@@ -150,6 +151,11 @@ public class GroupController {
 		count -= 1;
 		groupVO.setG_inpeople(count);
 		groupService.updateCount(groupVO);
+		
+		// 인원이 0이 되면 그룹 삭제
+		if(count < 1) {
+			groupService.delete(longSeq);
+		}
 		
 		return "redirect:/group";
 	}
