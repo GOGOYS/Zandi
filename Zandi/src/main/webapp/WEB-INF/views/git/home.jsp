@@ -24,9 +24,11 @@
 	form{
 		width: 300px;
 	}
+	
 </style>
 </head>
 <body>
+<%@ include file="/WEB-INF/views/load.jsp" %>
 	<h1>My Zandi</h1>
 	
 	<div class="zandi-img">

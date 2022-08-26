@@ -37,6 +37,7 @@
 </style>
 </head>
 <body>
+	<%@ include file="/WEB-INF/views/load.jsp" %>
 	<div class="wrap-container">
 		<h1>STUDY LIST</h1>
 		<c:forEach items="${GROUPLIST}" var="GROUP">
