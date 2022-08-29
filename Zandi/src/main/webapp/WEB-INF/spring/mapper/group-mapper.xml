@@ -38,11 +38,13 @@
  		INSERT INTO tbl_join_group(
  			j_seq,
 			j_gname,
-			j_username
+			j_username,
+			j_percent
  		)VALUES(
  			#{j_seq},
 			#{j_gname},
-			#{j_username}
+			#{j_username},
+			#{j_percent}
  		)
  	</insert>
  	
@@ -72,7 +74,7 @@
 			g_name VARCHAR(20) NOT NULL UNIQUE,
 			g_people INT NOT NULL,
 			g_inpeople INT,
-			g_enddate VARCHAR(13)
+			g_enddate INT
 		)
  	</select>
  	
@@ -81,7 +83,8 @@
 			j_seq BIGINT AUTO_INCREMENT PRIMARY KEY,
 			j_gname VARCHAR(20),
 			j_username VARCHAR(20),
-			j_userrepo VARCHAR(20)
+			j_userrepo VARCHAR(20),
+			j_percent INT
 		)
  	</select>
  	

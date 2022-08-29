@@ -40,6 +40,10 @@
 		margin:200px auto 0;
 	}
 	
+	.ester{
+		margin-left: auto;
+	}
+	
 </style>
 </head>
 
@@ -64,6 +68,7 @@
 					<a href="${rootPath}/group">스터디</a>
 					<a href="${rootPath}/user/logout">로그아웃</a>
 				</div>
+				<a class="ester" href="${rootPath}/user/joinout">회원탈퇴</a>
 			</c:otherwise>
 		</c:choose>
 	</div>

@@ -86,4 +86,10 @@ public class UserController {
 		
 		return "redirect:/";
 	}
+	
+	@RequestMapping(value="/joinout",method=RequestMethod.GET)
+	public String joinout() {
+		
+		return "user/joinout";
+	}
 }

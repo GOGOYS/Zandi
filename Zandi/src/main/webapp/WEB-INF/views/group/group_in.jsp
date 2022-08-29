@@ -37,6 +37,13 @@
 		</div>
 	</c:forEach>
 	
+	<form  method="POST">
+		<fieldset>
+			<legend> Comment</legend>
+			<input placeholder="내용을 입력하세요">
+		</fieldset>
+	</form>
+	
 	<a href="${rootPath}/group/list">리스트 가기</a>
 	<a href="${rootPath}/group/out/${GROUP.g_seq}">스터디방 탈퇴하기</a>
 

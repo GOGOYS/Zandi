@@ -1,8 +1,8 @@
 package com.heavenstar.zandi.model;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,5 +41,6 @@ public class GitCommitVO {
 		}	
 		public String message;
 	}
+	
 }
 

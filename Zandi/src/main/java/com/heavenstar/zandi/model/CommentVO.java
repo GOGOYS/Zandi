@@ -13,17 +13,11 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Builder
-public class GroupVO {
+public class CommentVO {
 	
-	public long g_seq;
-	public String g_name;
-	public int g_people;
-	public int g_inpeople;
-	public int g_enddate;
-	
-	private long j_seq;
-	private String j_gname;
-	private String j_username;
-	private String j_userrepo;
-	private int j_percent;
+	private long c_seq;
+	private long c_gseq;
+	private String c_username;
+	private String c_comment;
+
 }

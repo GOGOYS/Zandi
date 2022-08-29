@@ -83,11 +83,12 @@ public class GitServiceImpl implements GitService{
 						new ParameterizedTypeReference<JSONArray>(){}
 						);
 		
-		String json = resData.getBody().get(0).toString();
 		
-		ObjectMapper mapper = new ObjectMapper();
-		String respData = mapper.writeValueAsString(resData.getBody().get(0));
-	    GitCommitVO gitVO = mapper.readValue(respData, GitCommitVO.class);
+			String json = resData.getBody().get(0).toString();
+			
+			ObjectMapper mapper = new ObjectMapper();
+			String respData = mapper.writeValueAsString(resData.getBody().get(0));
+		    GitCommitVO gitVO = mapper.readValue(respData, GitCommitVO.class);
 		
         // 날짜 변환
         String transDate = dataTransate(gitVO.commit.author.getDate());
@@ -113,48 +114,34 @@ public class GitServiceImpl implements GitService{
 			return null;
 		}
 
-		//Http 프로토콜에 보안정보를 세팅하여
-		//Naver로 전송할 준비
+
 		HttpHeaders headers = new HttpHeaders();
-		headers.set("Authorization", "token "+ token);
-		
-		//XML 데이터 type으로 받겠다.
-		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-		
-		// headers에 추가된 정보를 Entity type의 객체로 변환하기
-		HttpEntity<String> entity = new HttpEntity<String>("parameter", headers);
-		
-		/*
-		 * 
-		 * NaverParent는 List<VO> 타입의 items 변수를 가지는데
-		 * 여기에서 VO type을 BookVO로 확정지어 준다.
-		 */
-		
+		headers.set("Authorization", "token "+ token);	
+		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));	
+
+		HttpEntity<String> entity = new HttpEntity<String>("parameter", headers);	
+
 		RestTemplate restTemp = new RestTemplate();
 		
-		
-		//VO가 아닌 String형으로 수신할것이다.
-		//문자열 타입으로 그대로 수신한다
-			ResponseEntity<JSONArray> resData = null;
+		ResponseEntity<JSONArray> resData = null;
 			
-			resData = restTemp.exchange(
+		resData = restTemp.exchange(
 						restURI, 
 						HttpMethod.GET, 
 						entity,
 						new ParameterizedTypeReference<JSONArray>(){}
 						);
 			
-			List<GitCommitVO> gitList = new ArrayList<>();
+		List<GitCommitVO> gitList = new ArrayList<>();
+		ObjectMapper mapper = new ObjectMapper();
 
-        for(int i =0; i < resData.getBody().size(); i++) {
-        	
-        	ObjectMapper mapper = new ObjectMapper();
+        for(int i =0; i < resData.getBody().size(); i++) {	
         	String respData = mapper.writeValueAsString(resData.getBody().get(i));
         	GitCommitVO gitVO = mapper.readValue(respData, GitCommitVO.class);
+        	//날짜 변환
 	        String transDate = dataTransate(gitVO.commit.author.getDate());
 	        gitVO.commit.author.setDate(transDate);
 	        gitList.add(gitVO);
-	        
         }
         
 		return gitList;
@@ -203,6 +190,7 @@ public class GitServiceImpl implements GitService{
 	}
 	
 	
+	// 날짜 변환
 	@Override
 	public String dataTransate(String date) {
 		
@@ -216,7 +204,6 @@ public class GitServiceImpl implements GitService{
 			strDate = sf.parse(date);
 			dateTime = sdf.format(strDate);
 		} catch (java.text.ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -237,7 +224,8 @@ public class GitServiceImpl implements GitService{
 		return read;
 	}
 
-
+	
+	// 오늘 커밋 비교
 	@Override
 	public int todayOk(String date) {
 		
