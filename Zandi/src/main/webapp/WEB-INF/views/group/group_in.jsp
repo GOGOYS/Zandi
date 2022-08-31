@@ -37,10 +37,20 @@
 		</div>
 	</c:forEach>
 	
+	<c:forEach items="${COMMENT}" var="COMMENT">
+		<div>
+			<div>
+				<div>${COMMENT.c_username}</div>
+				<div>${COMMENT.c_date} ${COMMENT.c_time}</div>
+			</div>
+			<div>${COMMENT.c_comment}</div>
+		</div>
+	</c:forEach>
 	<form  method="POST">
 		<fieldset>
 			<legend> Comment</legend>
 			<input name="c_comment" placeholder="내용을 입력하세요">
+			<button>작성</button>
 		</fieldset>
 	</form>
 	

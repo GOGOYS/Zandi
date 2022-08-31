@@ -19,25 +19,22 @@
  	</select>
 
  	<insert id="insert" parameterType="CommentVO">
-		INSERT INTO tbl_group(
-			c_seq,
+		INSERT INTO tbl_comment(
 			c_groupseq,
 			c_username,
+			c_date,
+			c_time,
 			c_comment
 		)VALUES(
-			#{c_seq},
 			#{c_groupseq},
 			#{c_username},
+			#{c_date},
+			#{c_time},
 			#{c_comment}
 		)
  	</insert>
  	
  	<update id="update" parameterType="CommentVO">
-		UPDATE tbl_join_comment
-		SET c_groupseq = #{c_gname}, 
-			c_username = #{c_username},
-			c_comment = #{c_comment}
-		WHERE c_seq = #{c_seq} 
  	</update>
  	
  	<delete id="delete" parameterType="CommentVO">
@@ -48,7 +45,9 @@
 		CREATE TABLE IF NOT EXISTS tbl_comment(
 			c_seq BIGINT AUTO_INCREMENT PRIMARY KEY,
 			c_groupseq BIGINT NOT NULL UNIQUE,
-			c_username INT NOT NULL,
+			c_username VARCHAR(20) NOT NULL,
+			c_date VARCHAR(20),
+			c_time VARCHAR(20),
 			c_comment VARCHAR(500)
 		)
  	</select>	

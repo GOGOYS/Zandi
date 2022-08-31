@@ -1,7 +1,9 @@
 package com.heavenstar.zandi.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -86,11 +88,9 @@ public class GroupController {
 			toOK.setUsername(username);
 			List<RepoListVO> repoList = gitService.getRepoList(username);
 			
-			
 			for(int j =0; j< repoList.size(); j++) {
 				String repoName = repoList.get(j).getName();
 				gitOk += gitService.CommitOk(username, repoName);
-				
 			}	
 			if(gitOk > 0) {
 				toOK.setMessage("완료");
@@ -100,12 +100,12 @@ public class GroupController {
 			okList.add(toOK);
 		}
 		
-		
-		
-		
 		//입장 처리
 		for(int i =0; i < peopleList.size(); i++) {	
 			if(peopleList.get(i).getJ_username().equals(userName)) {
+				List<CommentVO> commentList = commentService.findByGroupComment(longSeq);
+				log.debug("코멘트:{}",commentList);
+				model.addAttribute("COMMENT",commentList);
 				model.addAttribute("GROUP",groupName);
 				model.addAttribute("TOOK",okList);
 				return "/group/group_in";
@@ -116,16 +116,14 @@ public class GroupController {
 			return "redirect:/group";
 		}
 		
-		
-
 		//가입 인원이 들어오면 g_inpeople에 1씩 증가하여
 		//인원수 카운트 늘리기
 		int count = groupName.getG_inpeople();
-			count += 1;
-			groupName.setG_inpeople(count);
-			groupService.updateCount(groupName);
-
+		count += 1;
+		groupName.setG_inpeople(count);
+		groupService.updateCount(groupName);
 		groupService.insertPeople(group);
+		
 		model.addAttribute("GROUP",groupName);
 		model.addAttribute("TOOK",okList);
 		
@@ -138,14 +136,21 @@ public class GroupController {
 		
 		String userName = username(session);
 		long c_groupseq = Long.valueOf(g_seq);
+		Date current = new Date(System.currentTimeMillis());
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd");
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+		String date = dateFormat.format(current);
+		String time = timeFormat.format(current);
 		
 		commentVO.setC_username(userName);
 		commentVO.setC_groupseq(c_groupseq);
+		commentVO.setC_date(date);
+		commentVO.setC_time(time);
 		
 		commentService.insert(commentVO);
 		
 		
-		return "rediect:/group/group_in/" +g_seq;
+		return "redirect:/group/group_in/" +g_seq;
 	}
 	
 
@@ -185,6 +190,7 @@ public class GroupController {
 		
 		return userName;
 	}
+	
 	
 
 	

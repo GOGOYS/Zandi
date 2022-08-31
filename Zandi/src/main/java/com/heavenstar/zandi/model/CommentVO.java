@@ -18,6 +18,8 @@ public class CommentVO {
 	private long c_seq;
 	private long c_groupseq;
 	private String c_username;
+	private String c_date;
+	private String c_time;	
 	private String c_comment;
 
 }
