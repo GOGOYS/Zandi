@@ -16,7 +16,7 @@ import lombok.ToString;
 public class CommentVO {
 	
 	private long c_seq;
-	private long c_gseq;
+	private long c_groupseq;
 	private String c_username;
 	private String c_comment;
 

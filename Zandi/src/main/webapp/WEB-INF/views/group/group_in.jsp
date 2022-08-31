@@ -40,7 +40,7 @@
 	<form  method="POST">
 		<fieldset>
 			<legend> Comment</legend>
-			<input placeholder="내용을 입력하세요">
+			<input name="c_comment" placeholder="내용을 입력하세요">
 		</fieldset>
 	</form>
 	

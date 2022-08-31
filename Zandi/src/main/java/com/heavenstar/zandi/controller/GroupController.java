@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.heavenstar.zandi.model.GitCommitVO;
+import com.heavenstar.zandi.model.CommentVO;
 import com.heavenstar.zandi.model.GroupVO;
 import com.heavenstar.zandi.model.RepoListVO;
 import com.heavenstar.zandi.model.ToOkVO;
 import com.heavenstar.zandi.model.UserVO;
+import com.heavenstar.zandi.service.CommentService;
 import com.heavenstar.zandi.service.GitService;
 import com.heavenstar.zandi.service.GroupService;
 
@@ -34,6 +35,9 @@ public class GroupController {
 	
 	@Autowired
 	private GitService gitService;
+	
+	@Autowired
+	private CommentService commentService;
 	
 	@RequestMapping(value={"/",""},method=RequestMethod.GET)
 	public String group(Model model) {
@@ -61,10 +65,9 @@ public class GroupController {
 	
 	
 	@RequestMapping(value="/group_in/{g_seq}",method=RequestMethod.GET)
-	public String group_in(@PathVariable("g_seq") String g_seq, HttpSession session, Model model ) throws IOException, ParseException {
+	public String group_in(@PathVariable("g_seq") String g_seq,HttpSession session, Model model ) throws IOException, ParseException {
 		
-		UserVO user = (UserVO)session.getAttribute("USER");
-		String userName = user.u_username;
+		String userName = username(session);
 		long longSeq = Long.valueOf(g_seq);
 		GroupVO groupName = groupService.findByGroup(longSeq);
 		GroupVO group = new GroupVO();
@@ -130,6 +133,21 @@ public class GroupController {
 		
 	}
 	
+	@RequestMapping(value="/group_in/{g_seq}",method=RequestMethod.POST)
+	public String comment(@PathVariable("g_seq")String g_seq, CommentVO commentVO, HttpSession session) {
+		
+		String userName = username(session);
+		long c_groupseq = Long.valueOf(g_seq);
+		
+		commentVO.setC_username(userName);
+		commentVO.setC_groupseq(c_groupseq);
+		
+		commentService.insert(commentVO);
+		
+		
+		return "rediect:/group/group_in/" +g_seq;
+	}
+	
 
 	
 	@RequestMapping(value="/out/{g_seq}",method=RequestMethod.GET)
@@ -158,6 +176,14 @@ public class GroupController {
 		}
 		
 		return "redirect:/group";
+	}
+	
+	public String username(HttpSession session) {
+		
+		UserVO user = (UserVO)session.getAttribute("USER");
+		String userName = user.u_username;
+		
+		return userName;
 	}
 	
 

@@ -15,18 +15,18 @@
  	
  	<select id="findByGroupComment" resultType="CommentVO">
  		SELECT * FROM tbl_comment
-					WHERE c_gname = #{c_gname}
+					WHERE c_groupseq = #{c_groupseq}
  	</select>
 
  	<insert id="insert" parameterType="CommentVO">
 		INSERT INTO tbl_group(
 			c_seq,
-			c_gname,
+			c_groupseq,
 			c_username,
 			c_comment
 		)VALUES(
 			#{c_seq},
-			#{c_gname},
+			#{c_groupseq},
 			#{c_username},
 			#{c_comment}
 		)
@@ -34,7 +34,7 @@
  	
  	<update id="update" parameterType="CommentVO">
 		UPDATE tbl_join_comment
-		SET c_gname = #{c_gname}, 
+		SET c_groupseq = #{c_gname}, 
 			c_username = #{c_username},
 			c_comment = #{c_comment}
 		WHERE c_seq = #{c_seq} 
@@ -47,9 +47,9 @@
  	<select id="create_group_table">
 		CREATE TABLE IF NOT EXISTS tbl_comment(
 			c_seq BIGINT AUTO_INCREMENT PRIMARY KEY,
-			c_gname BIGINT NOT NULL UNIQUE,
+			c_groupseq BIGINT NOT NULL UNIQUE,
 			c_username INT NOT NULL,
-			c_comment VARCHAR(500),
+			c_comment VARCHAR(500)
 		)
  	</select>	
 
