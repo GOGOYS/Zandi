@@ -1,5 +1,10 @@
 package com.heavenstar.zandi.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,16 +95,32 @@ public class GroupServiceImpl implements GroupService{
 	}
 
 	@Override
-	public String percent(String create_date,int end_date, int percent) {
+	public int periodCheck(String create_date,String end_date) throws ParseException {
 		
 		//완료율 구하기
 		//1.방이 생성된 날짜로부터 마지막 날짜까지의 남은기간 구하기
 		//2. 남은 기간 동안의 출석환인률 구하기
 		
-		//남은 날짜 구하기?
+		// 시작일부터 종료일까지 기간 구하기
+		String[] createDateStr = create_date.split("-"); 
+		String[] endDateStr = end_date.split("-");
+		int[] createDateLong = new int[3];
+		int[] endDateLong = new int[3];
 		
-		// TODO Auto-generated method stub
-		return null;
+		for(int i=0; i < createDateStr.length; i++) {
+			int createDate = Integer.valueOf(createDateStr[i]);
+			createDateLong[i] = createDate; 
+			int endDate = Integer.valueOf(endDateStr[i]);
+			endDateLong[i] = endDate; 
+		}
+			
+		Calendar cal1 = new GregorianCalendar(createDateLong[0],createDateLong[1]-1,createDateLong[2]);
+		Calendar cal2 = new GregorianCalendar(endDateLong[0],endDateLong[1]-1,endDateLong[2]);
+
+		long diffSec = (cal2.getTimeInMillis() - cal1.getTimeInMillis()) /1000;
+		int diffDays = (int) diffSec / (24*60*60); 
+		
+		return diffDays;
 	}
 
 
