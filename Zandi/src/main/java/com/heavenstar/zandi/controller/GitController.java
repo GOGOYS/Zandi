@@ -44,21 +44,20 @@ public class GitController {
 		
 		model.addAttribute("USER",userVO);
 		
-		List<RepoListVO> getlist =gitService.getRepoList(gitName);
 		
-		List<String> repoList = new ArrayList<>();
-		int gitOk =0;
-		for(int i =0; i<getlist.size(); i++) {
-			
-			String repoName = getlist.get(i).name;	
-			repoList.add(repoName);
-			gitOk += gitService.CommitOk(gitName, repoName);
-			
+		if(session.getAttribute("REPONAME")== null) {
+			List<RepoListVO> getRepoList =gitService.getRepoList(gitName);
+			session.setAttribute("REPONAME",getRepoList);			
 		}
-		model.addAttribute("REPONAME",repoList);
+		List<RepoListVO> list = (List)session.getAttribute("REPONAME");
 		
-		String check = gitCheck(gitOk);
-		model.addAttribute("TODAYOK",check);
+		/*
+		 * int gitOk =0; for(int i =0; i<list.size(); i++) { gitOk +=
+		 * gitService.CommitOk(gitName, list.get(i).name); }
+		 */
+		//String check = gitCheck(gitOk);
+		//model.addAttribute("TODAYOK",check);
+		
 		
 		String currentImg = currentImg(user.u_username);
 		model.addAttribute("IMAGE",currentImg);
@@ -80,18 +79,17 @@ public class GitController {
 		
 		for(int i=0; i< repoList.size(); i++) {
 			if(i == intSeq) {
+				
 				String repoName = repoList.get(i).name;
-				int gitOk = gitService.CommitOk(gitName, repoName);
-
-				String check = gitCheck(gitOk);
-				model.addAttribute("TODAYOK",check);
+				model.addAttribute("REPONAME",repoName);
 				
 				List<GitCommitVO> gitList = gitService.allCommit(gitName, repoName);
 				model.addAttribute("GITLIST",gitList);
-				model.addAttribute("REPONAME",repoName);
+				int commitOk = gitService.todayOk(gitList.get(0).commit.author.getDate());
+				String check = gitCheck(commitOk);
+				model.addAttribute("TODAYOK",check);
 			}
 		}
-		
 		return "git/detail_repo";
 	}
 	

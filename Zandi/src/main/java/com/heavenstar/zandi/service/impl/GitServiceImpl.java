@@ -10,7 +10,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -65,35 +63,28 @@ public class GitServiceImpl implements GitService{
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", "token "+ token);
 		
-		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+		headers.setAccept(
+				Collections.singletonList(
+						MediaType.APPLICATION_JSON));
 		
-		HttpEntity<String> entity = new HttpEntity<String>("parameter", headers);
-		
+		HttpEntity<String> entity 
+		= new HttpEntity<String>("parameter",headers);
 		
 		RestTemplate restTemp = new RestTemplate();
 		
-		
-
-			ResponseEntity<JSONArray> resData = null;
+		ResponseEntity<List<GitCommitVO>> resData = null;
 			
-			resData = restTemp.exchange(
-						restURI, 
-						HttpMethod.GET, 
-						entity,
-						new ParameterizedTypeReference<JSONArray>(){}
-						);
+		resData = restTemp.exchange(
+					restURI, 
+					HttpMethod.GET, 
+					entity,
+					new ParameterizedTypeReference<List<GitCommitVO>>() {}
+					);
 		
-		
-			String json = resData.getBody().get(0).toString();
-			
-			ObjectMapper mapper = new ObjectMapper();
-			String respData = mapper.writeValueAsString(resData.getBody().get(0));
-		    GitCommitVO gitVO = mapper.readValue(respData, GitCommitVO.class);
+		List<GitCommitVO> gitList = resData.getBody();
 		
         // 날짜 변환
-        String transDate = dataTransate(gitVO.commit.author.getDate());
-        gitVO.commit.author.setDate(transDate);
-                
+        String transDate = dataTransate(gitList.get(0).commit.author.getDate());                
         int result = todayOk(transDate);
 
 		return result;
@@ -123,27 +114,22 @@ public class GitServiceImpl implements GitService{
 
 		RestTemplate restTemp = new RestTemplate();
 		
-		ResponseEntity<JSONArray> resData = null;
+		ResponseEntity<List<GitCommitVO>> resData = null;
 			
 		resData = restTemp.exchange(
 						restURI, 
 						HttpMethod.GET, 
 						entity,
-						new ParameterizedTypeReference<JSONArray>(){}
+						new ParameterizedTypeReference<List<GitCommitVO>>(){}
 						);
 			
-		List<GitCommitVO> gitList = new ArrayList<>();
-		ObjectMapper mapper = new ObjectMapper();
+		List<GitCommitVO> gitList = resData.getBody();
 
-        for(int i =0; i < resData.getBody().size(); i++) {	
-        	String respData = mapper.writeValueAsString(resData.getBody().get(i));
-        	GitCommitVO gitVO = mapper.readValue(respData, GitCommitVO.class);
+        for(int i =0; i < gitList.size(); i++) {	
         	//날짜 변환
-	        String transDate = dataTransate(gitVO.commit.author.getDate());
-	        gitVO.commit.author.setDate(transDate);
-	        gitList.add(gitVO);
+	        String transDate = dataTransate(gitList.get(i).commit.author.getDate());
+	        gitList.get(i).commit.author.setDate(transDate);
         }
-        
 		return gitList;
 	}
 	

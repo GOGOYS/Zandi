@@ -25,12 +25,14 @@
 			g_seq,
 			g_name,
 			g_people,
-			g_enddate
+			g_create_date,
+			g_end_date
 		)VALUES(
 			#{g_seq},
 			#{g_name},
 			#{g_people},
-			#{g_enddate}
+			#{g_create_date},
+			#{g_end_date}
 		)
  	</insert>
  	
@@ -74,7 +76,8 @@
 			g_name VARCHAR(20) NOT NULL UNIQUE,
 			g_people INT NOT NULL,
 			g_inpeople INT,
-			g_enddate INT
+			g_create_date VARCHAR(20),
+			g_end_date VARCHAR(20)
 		)
  	</select>
  	

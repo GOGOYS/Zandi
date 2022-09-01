@@ -52,7 +52,7 @@
 			<c:forEach items="${REPONAME}" var="REPO" varStatus="INDEX">
 				<div class="target repo-box" data-seq="${INDEX.count}">
 					<span>${INDEX.count}</span>
-					<span>${REPO}</span>
+					<span>${REPO.name}</span>
 				</div>
 			</c:forEach>
 		</div>

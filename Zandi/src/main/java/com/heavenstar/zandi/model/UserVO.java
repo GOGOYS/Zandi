@@ -23,6 +23,6 @@ public class UserVO {
 	public String u_github_id;
 	public String u_email;
 	
-	List<GitCommitVO> gitList;
+	public List<GitCommitVO> gitList;
 
 }

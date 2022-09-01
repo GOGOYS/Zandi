@@ -57,7 +57,7 @@
 						<label>인원제한 </label>
 						<input name="g_people" type="number"  value="4" min="4" max="20" >
 						<label>기간 D-</label>
-						<input name="g_enddate" type="number"  value="30" min="30"  >
+						<input name="end_date" type="date" value="2022-09-30" >
 				</div>
 				<button>생성</button>
 			</fieldset> 

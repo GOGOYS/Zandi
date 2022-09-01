@@ -53,17 +53,28 @@ public class GroupController {
 	@RequestMapping(value={"/",""},method=RequestMethod.POST)
 	public String group(GroupVO groupVO) {
 		
-		groupVO.setG_inpeople(0);
-		groupService.insert(groupVO);
-		List<GroupVO> groupList = groupService.selectAll();
-		int g_seq = groupList.size();
+		log.debug("아이야:{}",groupVO);
 		
-		return "redirect:/group/group_in/"+ g_seq;
+		Date currDate = new Date(System.currentTimeMillis());
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String today = dateFormat.format(currDate);
+		
+		Date dateDate = groupVO.getEnd_date();
+		String endDay = dateFormat.format(dateDate);
+		
+		groupVO.setG_inpeople(0);
+		groupVO.setG_create_date(today);
+		groupVO.setG_end_date(endDay);
+		groupService.insert(groupVO);	
+		
+		List<GroupVO> groupList =groupService.selectAll();
+		int size = groupList.size() -1;
+		long seq = groupList.get(size).getG_seq();
+		
+		return "redirect:/group/group_in/" + seq;
 	}
-	@RequestMapping(value={"/list"},method=RequestMethod.GET)
-	public String grouplist() {
-		return "redirect:/group";
-	}
+
 	
 	
 	@RequestMapping(value="/group_in/{g_seq}",method=RequestMethod.GET)
@@ -75,43 +86,24 @@ public class GroupController {
 		GroupVO group = new GroupVO();
 		group.setJ_gname(groupName.getG_name());
 		group.setJ_username(userName);
+		List<GroupVO> peopleCheckList = groupService.findByGroupPeople(groupName.getG_name());
 		
-		List<GroupVO> peopleList = groupService.findByGroupPeople(groupName.getG_name());
-		model.addAttribute("PEOPLELIST",peopleList);
 		
-		//오늘 커밋 완료 처리
-		List<ToOkVO> okList = new ArrayList<>();
-		int gitOk = 0;
-		for(int i =0; i < peopleList.size(); i++) {
-			ToOkVO toOK = new ToOkVO();
-			String username = peopleList.get(i).getJ_username();
-			toOK.setUsername(username);
-			List<RepoListVO> repoList = gitService.getRepoList(username);
-			
-			for(int j =0; j< repoList.size(); j++) {
-				String repoName = repoList.get(j).getName();
-				gitOk += gitService.CommitOk(username, repoName);
-			}	
-			if(gitOk > 0) {
-				toOK.setMessage("완료");
-			}else {
-				toOK.setMessage("미완료");
-			}
-			okList.add(toOK);
-		}
+		//List<ToOkVO>  okList = todayCommitCheck(peopleList);
 		
 		//입장 처리
-		for(int i =0; i < peopleList.size(); i++) {	
-			if(peopleList.get(i).getJ_username().equals(userName)) {
+		for(int i =0; i < peopleCheckList.size(); i++) {	
+			if(peopleCheckList.get(i).getJ_username().equals(userName)) {
 				List<CommentVO> commentList = commentService.findByGroupComment(longSeq);
-				log.debug("코멘트:{}",commentList);
 				model.addAttribute("COMMENT",commentList);
 				model.addAttribute("GROUP",groupName);
-				model.addAttribute("TOOK",okList);
-				return "/group/group_in";
+				model.addAttribute("PEOPLELIST",peopleCheckList);
+				//model.addAttribute("TOOK",okList);
+				return "group/group_in";
 			}			
 		}
-		if(peopleList.size() >= groupName.getG_people()) {
+		//인원 다 차면 들어오지 못하게
+		if(peopleCheckList.size() >= groupName.getG_people()) {
 			model.addAttribute("MESSAGE",g_seq);
 			return "redirect:/group";
 		}
@@ -125,9 +117,12 @@ public class GroupController {
 		groupService.insertPeople(group);
 		
 		model.addAttribute("GROUP",groupName);
-		model.addAttribute("TOOK",okList);
+		//model.addAttribute("TOOK",okList);
 		
-		return "redirect:/group/group_in";
+		
+		List<GroupVO> peopleList = groupService.findByGroupPeople(groupName.getG_name());
+		model.addAttribute("PEOPLELIST",peopleList);
+		return "group/group_in";
 		
 	}
 	
@@ -183,6 +178,12 @@ public class GroupController {
 		return "redirect:/group";
 	}
 	
+	@RequestMapping(value="/list",method=RequestMethod.GET)
+	public String list_go() {
+		
+		return "redirect:/group";
+	}
+	
 	public String username(HttpSession session) {
 		
 		UserVO user = (UserVO)session.getAttribute("USER");
@@ -190,6 +191,32 @@ public class GroupController {
 		
 		return userName;
 	}
+	
+	//오늘 커밋 완료 검사
+	public List<ToOkVO> todayCommitCheck(List<GroupVO> peopleList) throws IOException, ParseException{
+		
+				List<ToOkVO> okList = new ArrayList<>();
+				int gitOk = 0;
+				for(int i =0; i < peopleList.size(); i++) {
+					ToOkVO toOK = new ToOkVO();
+					String username = peopleList.get(i).getJ_username();
+					toOK.setUsername(username);
+					List<RepoListVO> repoList = gitService.getRepoList(username);
+					
+					for(int j =0; j< repoList.size(); j++) {
+						String repoName = repoList.get(j).getName();
+						gitOk += gitService.CommitOk(username, repoName);
+					}	
+					if(gitOk > 0) {
+						toOK.setMessage("완료");
+					}else {
+						toOK.setMessage("미완료");
+					}
+					okList.add(toOK);
+				}
+		return okList;
+	}
+	
 	
 	
 

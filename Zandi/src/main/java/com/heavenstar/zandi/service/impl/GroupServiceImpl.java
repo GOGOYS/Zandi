@@ -89,6 +89,19 @@ public class GroupServiceImpl implements GroupService{
 		
 	}
 
+	@Override
+	public String percent(String create_date,int end_date, int percent) {
+		
+		//완료율 구하기
+		//1.방이 생성된 날짜로부터 마지막 날짜까지의 남은기간 구하기
+		//2. 남은 기간 동안의 출석환인률 구하기
+		
+		//남은 날짜 구하기?
+		
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 
