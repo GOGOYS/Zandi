@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.parser.ParseException;
@@ -51,17 +53,9 @@ public class GitController {
 		}
 		List<RepoListVO> list = (List)session.getAttribute("REPONAME");
 		
-		/*
-		 * int gitOk =0; for(int i =0; i<list.size(); i++) { gitOk +=
-		 * gitService.CommitOk(gitName, list.get(i).name); }
-		 */
-		//String check = gitCheck(gitOk);
-		//model.addAttribute("TODAYOK",check);
-		
-		
 		String currentImg = currentImg(user.u_username);
 		model.addAttribute("IMAGE",currentImg);
-		
+				
 		return "git/home";
 	}
 

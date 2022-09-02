@@ -33,7 +33,7 @@ public class GroupVO {
 	private long j_seq;
 	private String j_gname;
 	private String j_username;
-	private String j_userrepo;
-	private int j_percent;
+	private int j_count;
+	private String j_percent;
 
 }

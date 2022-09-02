@@ -26,7 +26,8 @@
 	<h3>참여인원</h3>
 	<div class="people-container">
 		<c:forEach items="${PEOPLELIST}" var="PEOPLE">
-			<div class="people">${PEOPLE.j_username}</div>
+			<div class="people">이름 : ${PEOPLE.j_username}</div>
+			<div class="people">출석률 : ${PEOPLE.j_percent}%</div>
 		</c:forEach>
 	</div>
 	

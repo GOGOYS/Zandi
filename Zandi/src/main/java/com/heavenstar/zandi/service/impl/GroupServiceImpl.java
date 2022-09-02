@@ -60,14 +60,14 @@ public class GroupServiceImpl implements GroupService{
 	}
 
 	@Override
-	public int updateCount(GroupVO groupVO) {
+	public int updateGroupIn(GroupVO groupVO) {
 		// TODO Auto-generated method stub
-		return groupDao.updateCount(groupVO);
+		return groupDao.updateGroupIn(groupVO);
 	}
 	@Override
-	public int update(GroupVO groupVO) {
+	public int updateUser(GroupVO groupVO) {
 		// TODO Auto-generated method stub
-		return groupDao.update(groupVO);
+		return groupDao.updateUser(groupVO);
 	}
 
 	@Override
@@ -122,6 +122,8 @@ public class GroupServiceImpl implements GroupService{
 		
 		return diffDays;
 	}
+
+
 
 
 

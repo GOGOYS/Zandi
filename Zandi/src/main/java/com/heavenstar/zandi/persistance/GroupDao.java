@@ -14,8 +14,8 @@ public interface GroupDao {
 	public GroupVO findByOnePeople(@Param("j_gname") String j_gname,@Param("j_username") String j_username);
 	public int insert(GroupVO groupVO);
 	public int insertPeople(GroupVO groupVO);
-	public int update(GroupVO groupVO);
-	public int updateCount(GroupVO groupVO);
+	public int updateGroupIn(GroupVO groupVO);
+	public int updateUser(GroupVO groupVO);
 	public int delete(long g_seq);
 	public int deletePeople(long j_seq);
 	

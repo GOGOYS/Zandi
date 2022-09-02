@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.parser.ParseException;
@@ -78,27 +81,45 @@ public class GroupController {
 	
 	
 	@RequestMapping(value="/group_in/{g_seq}",method=RequestMethod.GET)
-	public String group_in(@PathVariable("g_seq") String g_seq,HttpSession session, Model model ) throws IOException, ParseException {
+	public String group_in(@PathVariable("g_seq") String g_seq,HttpSession session,
+			Model model) throws IOException, ParseException, java.text.ParseException {
 		
 		String userName = username(session);
 		long longSeq = Long.valueOf(g_seq);
 		GroupVO groupName = groupService.findByGroup(longSeq);
+		model.addAttribute("GROUP",groupName);
+		
 		GroupVO group = new GroupVO();
 		group.setJ_gname(groupName.getG_name());
 		group.setJ_username(userName);
+		
+		
+		
 		List<GroupVO> peopleCheckList = groupService.findByGroupPeople(groupName.getG_name());
 		
+		//출석 완료율 구하기
+		int period = groupService.periodCheck(groupName.getG_create_date(),groupName.getG_end_date()) +1;
+		for(int i=0; i < peopleCheckList.size();i++) {
+			GroupVO userGroupVO = groupService.findByOnePeople(groupName.getG_name(), peopleCheckList.get(i).getJ_username());
+			double douPercent = 100 * (userGroupVO.getJ_count() / (double)period);
+			String strPercent = String.format("%.2f", douPercent);
+			peopleCheckList.get(i).setJ_percent(strPercent);
+		}
 		
-		//List<ToOkVO>  okList = todayCommitCheck(peopleList);
+		model.addAttribute("PEOPLELIST",peopleCheckList);
+		
+		List<CommentVO> commentList = commentService.findByGroupComment(longSeq);
+		model.addAttribute("COMMENT",commentList);
+		
 		
 		//입장 처리
+		int count = groupName.getG_inpeople();
 		for(int i =0; i < peopleCheckList.size(); i++) {	
-			if(peopleCheckList.get(i).getJ_username().equals(userName)) {
-				List<CommentVO> commentList = commentService.findByGroupComment(longSeq);
-				model.addAttribute("COMMENT",commentList);
-				model.addAttribute("GROUP",groupName);
-				model.addAttribute("PEOPLELIST",peopleCheckList);
-				//model.addAttribute("TOOK",okList);
+			if(!peopleCheckList.get(i).getJ_username().equals(userName)) {
+				count += 1;
+				groupName.setG_inpeople(count);
+				groupService.updateGroupIn(groupName);
+				groupService.insertPeople(group);
 				return "group/group_in";
 			}			
 		}
@@ -108,29 +129,19 @@ public class GroupController {
 			return "redirect:/group";
 		}
 		
-		//가입 인원이 들어오면 g_inpeople에 1씩 증가하여
-		//인원수 카운트 늘리기
-		int count = groupName.getG_inpeople();
-		count += 1;
-		groupName.setG_inpeople(count);
-		groupService.updateCount(groupName);
-		groupService.insertPeople(group);
 		
-		model.addAttribute("GROUP",groupName);
-		//model.addAttribute("TOOK",okList);
-		
-		
-		List<GroupVO> peopleList = groupService.findByGroupPeople(groupName.getG_name());
-		model.addAttribute("PEOPLELIST",peopleList);
 		return "group/group_in";
 		
 	}
 	
 	@RequestMapping(value="/group_in/{g_seq}",method=RequestMethod.POST)
-	public String comment(@PathVariable("g_seq")String g_seq, CommentVO commentVO, HttpSession session) {
+	public String comment(@PathVariable("g_seq")String g_seq, CommentVO commentVO, HttpSession session,
+			HttpServletResponse response, HttpServletRequest request ) throws java.text.ParseException {
 		
 		String userName = username(session);
 		long c_groupseq = Long.valueOf(g_seq);
+		
+		//CommentVO에 날짜 담아서 기록하기
 		Date current = new Date(System.currentTimeMillis());
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd");
 		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
@@ -144,6 +155,42 @@ public class GroupController {
 		
 		commentService.insert(commentVO);
 		
+		GroupVO group = groupService.findByGroup(c_groupseq);
+		GroupVO user =  groupService.findByOnePeople(group.getG_name(), userName);
+		int commentCount = user.getJ_count();
+		
+		//이미 쿠키에 저장되었는지 확인하기
+		Cookie[] cookies = request.getCookies();
+		boolean check = false;
+		for(int i=0; i < cookies.length; i++) {
+			//일치하하는 name 값 가져오기
+			if(cookies[i].getName().equals(userName + c_groupseq)){
+				// name값의 value가져와서 오늘 날짜와 비교
+				if(!cookies[i].getValue().equals(date)) {					
+					//일치 안하면 저장된 쿠키 삭제후 카운트 1 올리고, 오늘 날짜의 쿠키 생성
+					cookies[i].setMaxAge(0);
+					response.addCookie(cookies[i]);
+					commentCount +=1;
+					user.setJ_count(commentCount);
+					groupService.updateUser(user);
+					Cookie cookie = new Cookie(userName + c_groupseq,date);
+					cookie.setPath("/");
+					cookie.setMaxAge(60*60*24);
+					response.addCookie(cookie);
+				}
+				check = true;
+			}
+		}
+		//일치 값이 없을 경우 카운트 올리고 쿠키 값 저장
+		if(check == false) {
+			commentCount +=1;
+			user.setJ_count(commentCount);
+			groupService.updateUser(user);
+			Cookie cookie = new Cookie(userName + c_groupseq,date);
+			cookie.setPath("/");
+			cookie.setMaxAge(60*60*24);
+			response.addCookie(cookie);
+		}
 		
 		return "redirect:/group/group_in/" +g_seq;
 	}
@@ -168,7 +215,7 @@ public class GroupController {
 		int count = groupVO.getG_inpeople();
 		count -= 1;
 		groupVO.setG_inpeople(count);
-		groupService.updateCount(groupVO);
+		groupService.updateGroupIn(groupVO);
 		
 		// 인원이 0이 되면 그룹 삭제
 		if(count < 1) {
@@ -216,9 +263,5 @@ public class GroupController {
 				}
 		return okList;
 	}
-	
-	
-	
 
-	
 }
