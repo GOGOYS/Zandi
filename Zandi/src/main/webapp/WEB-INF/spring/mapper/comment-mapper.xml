@@ -44,7 +44,7 @@
  	<select id="create_group_table">
 		CREATE TABLE IF NOT EXISTS tbl_comment(
 			c_seq BIGINT AUTO_INCREMENT PRIMARY KEY,
-			c_groupseq BIGINT NOT NULL UNIQUE,
+			c_groupseq BIGINT NOT NULL,
 			c_username VARCHAR(20) NOT NULL,
 			c_date VARCHAR(20),
 			c_time VARCHAR(20),
