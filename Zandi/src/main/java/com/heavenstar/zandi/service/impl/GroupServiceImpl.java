@@ -1,6 +1,5 @@
 package com.heavenstar.zandi.service.impl;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -95,7 +94,7 @@ public class GroupServiceImpl implements GroupService{
 	}
 
 	@Override
-	public int periodCheck(String create_date,String end_date) throws ParseException {
+	public int periodCheck(String create_date,String end_date){
 		
 		//완료율 구하기
 		//1.방이 생성된 날짜로부터 마지막 날짜까지의 남은기간 구하기
@@ -121,6 +120,34 @@ public class GroupServiceImpl implements GroupService{
 		int diffDays = (int) diffSec / (24*60*60); 
 		
 		return diffDays;
+	}
+	
+	public int dDaycheck(String end_date) {
+		
+		Date curDate = new Date(System.currentTimeMillis());
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String today = dateFormat.format(curDate);
+		
+		String[] todayDateStr = today.split("-");
+		String[] endDateStr = end_date.split("-");
+		int[] createDateLong = new int[3];
+		int[] endDateLong = new int[3];
+		
+		for(int i=0; i < todayDateStr.length; i++) {
+			int createDate = Integer.valueOf(todayDateStr[i]);
+			createDateLong[i] = createDate; 
+			int endDate = Integer.valueOf(endDateStr[i]);
+			endDateLong[i] = endDate; 
+		}
+			
+		Calendar cal1 = new GregorianCalendar(createDateLong[0],createDateLong[1]-1,createDateLong[2]);
+		Calendar cal2 = new GregorianCalendar(endDateLong[0],endDateLong[1]-1,endDateLong[2]);
+
+		long diffSec = (cal2.getTimeInMillis() - cal1.getTimeInMillis()) /1000;
+		int diffDays = (int) diffSec / (24*60*60); 
+		
+		return diffDays;
+		
 	}
 
 

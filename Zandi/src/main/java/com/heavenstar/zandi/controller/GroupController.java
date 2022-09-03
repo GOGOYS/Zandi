@@ -106,7 +106,15 @@ public class GroupController {
 			peopleCheckList.get(i).setJ_percent(strPercent);
 		}
 		
-		model.addAttribute("PEOPLELIST",peopleCheckList);
+		//스터디 종료일까지 남은기간
+		int dDayCheck = groupService.dDaycheck(groupName.getG_end_date());
+		
+		if(dDayCheck == 0) {
+			//기간이 종료되면 D-DAY 보내기
+			model.addAttribute("DDAY", "DAY");
+		}else {			
+			model.addAttribute("DDAY",dDayCheck);
+		}
 		
 		List<CommentVO> commentList = commentService.findByGroupComment(longSeq);
 		model.addAttribute("COMMENT",commentList);
@@ -115,11 +123,9 @@ public class GroupController {
 		//입장 처리
 		int count = groupName.getG_inpeople();
 		for(int i =0; i < peopleCheckList.size(); i++) {	
-			if(!peopleCheckList.get(i).getJ_username().equals(userName)) {
-				count += 1;
-				groupName.setG_inpeople(count);
-				groupService.updateGroupIn(groupName);
-				groupService.insertPeople(group);
+			// 이미 가입자면 바로 보내기
+			if(peopleCheckList.get(i).getJ_username().equals(userName)) {
+				model.addAttribute("PEOPLELIST",peopleCheckList);
 				return "group/group_in";
 			}			
 		}
@@ -129,6 +135,15 @@ public class GroupController {
 			return "redirect:/group";
 		}
 		
+		//새로 가입하면 insert
+		count += 1;
+		groupName.setG_inpeople(count);
+		groupService.updateGroupIn(groupName);
+		group.setJ_percent("0.00");
+		groupService.insertPeople(group);
+		
+		List<GroupVO> insertPeopleList = groupService.findByGroupPeople(groupName.getG_name());
+		model.addAttribute("PEOPLELIST",insertPeopleList);
 		
 		return "group/group_in";
 		

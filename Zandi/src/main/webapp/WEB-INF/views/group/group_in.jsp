@@ -22,6 +22,12 @@
 	<%@ include file="/WEB-INF/views/load.jsp" %>
 
 	<h1>${GROUP.g_name}의 스터디 룸</h1>
+	<div>스터디방의 남은 기간 : </div>
+	<c:choose>
+		<c:when test="${DDAY == DAY}">D-DAY</c:when>	
+		<c:otherwise>D-${DDAY}</c:otherwise>
+	</c:choose>
+
 	
 	<h3>참여인원</h3>
 	<div class="people-container">
