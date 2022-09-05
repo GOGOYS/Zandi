@@ -9,15 +9,19 @@
 <title>Insert title here</title>
 <style>
 	img{
-		width: 40%;
+		height: 100%;
+	}
+	
+	a{
+		text-decoration: none;
+		color: #aaa;
 	}
 	
 </style>
 </head>
 <body>
 	<div class="box">
-		<img src="${rootPath}/static/image/esteregg.jpg">
-		<h1>회원 탈퇴 그딴거 없다!</h1>
+		<img src="${rootPath}/static/image/esteregg.jpg" title="회원탈퇴? 그딴거 없다!" alt="탈퇴 같은건 없다">
 		<a href="${rootPath}/">홈 가기</a>
 	</div>
 

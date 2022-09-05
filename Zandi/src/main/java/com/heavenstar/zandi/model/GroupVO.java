@@ -19,6 +19,7 @@ import lombok.ToString;
 @Builder
 public class GroupVO {
 	
+	//그룹VO
 	public long g_seq;
 	public String g_name;
 	public int g_people;
@@ -26,10 +27,14 @@ public class GroupVO {
 	public String g_create_date;
 	public String g_end_date;
 	
+	//controller에서 기간을 구해서 model에 보내는 용도
+	public String period;
+	
 	//form에서 지정한 end_date 받아오는것
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	public Date end_date;
 	
+	//그룹 참가인원VO
 	private long j_seq;
 	private String j_gname;
 	private String j_username;

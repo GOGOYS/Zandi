@@ -11,35 +11,46 @@
 		color:red;
 	}
 	
+	.header{
+		margin:0 auto;	
+	}
+	
 	.form-box{
 		display: flex;
 		flex-direction: column;
-		width: 400px;
-		height: 120px;
+		width: 500px;
+		margin: 0 auto;
 	}
 	
 	button{
 		margin-top:6px;
-		width: inherit;
+		width: 380px;
+		background-color: blue;
+		color:white;
+		border: none;
+	}
+	
+	.input-box input{
+		width: 380px;
 	}
 
 </style>
 </head>
 <body>
+	<div class="header">
+		<div>로그인</div>
+	</div>
 	<form method="POST" class="form-box">
-		<fieldset>
-			<legend>로그인</legend>
 				<c:if test="${error == 'LOGIN_FAIL'}">
-					<div class="error-message">아이디나 비밀번호가 틀렸습니다</div>
+					<div>
+						<div class="error-message">아이디나 비밀번호가 틀렸습니다</div>
+					</div>
 				</c:if>
 			<div class="input-box">
-				<label for="id">ID : </label>
-				<input name="u_username" placeholder="id를 입력하세요" id="id">
-				<label for="pass">PASSWORD : </label>
-				<input name="u_password" type="password" id="pass">
+				<input name="u_username" placeholder="아이디" id="id">
+				<input name="u_password" placeholder="비밀번호" type="password" id="pass">
 			</div>
 			<button>로그인</button>
-		</fieldset>
 	</form>
 </body>
 </html>

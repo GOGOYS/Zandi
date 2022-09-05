@@ -12,15 +12,21 @@
  	<select id="findByUserTrophy" resultType="TrophyVO">
  		SELECT * FROM tbl_trophy WHERE t_username = #{t_username}
  	</select>
+ 	
+ 	<select id="findByOneTrophy" resultType="TrophyVO">
+ 		SELECT * FROM tbl_trophy WHERE t_username = #{t_username} AND t_groupseq = #{t_groupseq}
+ 	</select>
 
  	<insert id="insert" parameterType="TrophyVO">
 		INSERT INTO tbl_trophy(
 			t_groupseq,
+			t_groupname,
 			t_username,
 			t_complete,
 			t_trophy
 		)VALUES(
 			#{t_groupseq},
+			#{t_groupname},
 			#{t_username},
 			#{t_complete},
 			#{t_trophy}
@@ -31,6 +37,7 @@
 		CREATE TABLE IF NOT EXISTS tbl_trophy(
 			t_seq BIGINT AUTO_INCREMENT PRIMARY KEY,
 			t_groupseq BIGINT NOT NULL,
+			t_groupname VARCHAR(20) NOT NULL,
 			t_username VARCHAR(20) NOT NULL,
 			t_complete VARCHAR(5),
 			t_trophy boolean

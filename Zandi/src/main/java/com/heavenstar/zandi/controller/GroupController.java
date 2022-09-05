@@ -50,10 +50,16 @@ public class GroupController {
 	private TrophyService trophyService;
 	
 	@RequestMapping(value={"/",""},method=RequestMethod.GET)
-	public String group(HttpSession session, Model model) {
+	public String group(String seq,HttpSession session, Model model) {
 		
 		String userName = username(session);
 		model.addAttribute("USER",userName);
+		
+		if(seq != null) {
+			long longSeq = Long.valueOf(seq);	
+			GroupVO groupName = groupService.findByGroup(longSeq);
+			model.addAttribute("FULLIN",groupName.getG_name());	
+		}
 		
 		List<TrophyVO> trophyList = trophyService.findByUserTrophy(userName);
 		for(int i =0; i < trophyList.size(); i++) {
@@ -64,14 +70,23 @@ public class GroupController {
 		model.addAttribute("TROPHY",trophyList);
 		
 		List<GroupVO> groupList = groupService.selectAll();
+		for(int i=0; i < groupList.size(); i++) {
+			String cDate = groupList.get(i).getG_create_date();
+			String eDate = groupList.get(i).getG_end_date();
+			int period = groupService.periodCheck(cDate, eDate);
+			if(period != 0) {
+				String strPeriod = String.valueOf(period);
+				groupList.get(i).setPeriod(strPeriod);
+			}			
+			
+		}
 		model.addAttribute("GROUPLIST", groupList);
 		
 		return "group/home";
 	}
 	@RequestMapping(value={"/",""},method=RequestMethod.POST)
-	public String group(GroupVO groupVO) {
+	public String group(GroupVO groupVO, HttpSession session) {
 		
-		log.debug("아이야:{}",groupVO);
 		
 		Date currDate = new Date(System.currentTimeMillis());
 		
@@ -88,9 +103,23 @@ public class GroupController {
 		
 		List<GroupVO> groupList =groupService.selectAll();
 		int size = groupList.size() -1;
-		long seq = groupList.get(size).getG_seq();
+		long longSeq = groupList.get(size).getG_seq();
 		
-		return "redirect:/group/group_in/" + seq;
+		
+		//인원 처리
+		GroupVO groupName = groupService.findByGroup(longSeq);
+		int count = groupName.getG_inpeople();
+		count += 1;
+		groupName.setG_inpeople(count);
+		groupService.updateGroupIn(groupName);
+		
+		GroupVO group = new GroupVO();
+		group.setJ_gname(groupName.getG_name());
+		group.setJ_username(username(session));
+		group.setJ_percent("0.00");
+		groupService.insertPeople(group);
+		
+		return "redirect:/group/group_in/" + longSeq;
 	}
 
 	
@@ -124,37 +153,36 @@ public class GroupController {
 		//스터디 종료일까지 남은기간
 		int dDayCheck = groupService.dDaycheck(groupName.getG_end_date());
 		
-		if(dDayCheck == 1) {
+		if(dDayCheck == 0) {
 			//기간이 종료되면 D-DAY 보내기
-			model.addAttribute("DDAY", "DAY");
-			
-			// 기간이 0이면 완료율과 트로피값을 vo에 담아 저장
-			TrophyVO trophyVO = new TrophyVO();
-			trophyVO.setT_username(userName);
-			trophyVO.setT_groupseq(longSeq);
-			trophyVO.setT_groupname(groupName.getG_name());
+			model.addAttribute("DDAY", "DAY");			
+		}else {			
+			model.addAttribute("DDAY",dDayCheck);
+		}
+		
+		//trophy 값 구하기
+		TrophyVO trophyVO = trophyService.findByOneTrophy(userName, longSeq);
+		//트로피가 없으면 실행
+		if(trophyVO == null) {
 			GroupVO userGroupVO = groupService.findByOnePeople(groupName.getG_name(),userName);
 			int userCount = 0;
 			if(userGroupVO  != null) {
 				userCount = userGroupVO.getJ_count();
 			}
-
 			double douPercent = 100 * ( userCount/ (double)period);
-			log.debug("출석률:{}",douPercent);
-			if(douPercent >= 30) {
-				trophyVO.setT_trophy(true);
-			}else {
-				trophyVO.setT_trophy(false);
-			}
 			String strPercent = String.format("%.2f", douPercent);
-			trophyVO.setT_complete(strPercent);
-			log.debug("트로피:{}",trophyVO);
-			trophyService.insert(trophyVO);
-			
-		}else {			
-			model.addAttribute("DDAY",dDayCheck);
+			// 완료율을 계산해서 80%가 넘었으면 트로피 생성
+			if(percentCheck(douPercent) == true) {
+				TrophyVO newTrophy = new TrophyVO();
+				newTrophy.setT_username(userName);
+				newTrophy.setT_groupseq(longSeq);
+				newTrophy.setT_groupname(groupName.getG_name());
+				newTrophy.setT_trophy(percentCheck(douPercent));
+				newTrophy.setT_complete(strPercent);
+				trophyService.insert(newTrophy);				
+			}
 		}
-		
+
 		List<CommentVO> commentList = commentService.findByGroupComment(longSeq);
 		model.addAttribute("COMMENT",commentList);
 		
@@ -170,7 +198,7 @@ public class GroupController {
 		}
 		//인원 다 차면 들어오지 못하게
 		if(peopleCheckList.size() >= groupName.getG_people()) {
-			model.addAttribute("MESSAGE",g_seq);
+			model.addAttribute("seq",longSeq);
 			return "redirect:/group";
 		}
 		
@@ -316,6 +344,15 @@ public class GroupController {
 					okList.add(toOK);
 				}
 		return okList;
+	}
+	
+	//TODO 퍼센트 체크(완료율)
+	public boolean percentCheck(Double douPercent) {
+		if(douPercent >= 10) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 }

@@ -22,11 +22,16 @@ public class TrophyServiceImpl implements TrophyService{
 	}
 
 	@Override
-	public List<TrophyVO> findByUserTrophy(String username) {
+	public List<TrophyVO> findByUserTrophy(String t_username) {
 		// TODO Auto-generated method stub
-		return trophyDao.findByUserTrophy(username);
+		return trophyDao.findByUserTrophy(t_username);
 	}
 
+	@Override
+	public TrophyVO findByOneTrophy(String t_username,long t_groupseq) {
+		// TODO Auto-generated method stub
+		return trophyDao.findByOneTrophy(t_username, t_groupseq);
+	}
 	@Override
 	public int insert(TrophyVO trophyVO) {
 		// TODO Auto-generated method stub
@@ -38,5 +43,12 @@ public class TrophyServiceImpl implements TrophyService{
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	@Override
+	public int updateTrophy(long t_seq) {
+		// TODO Auto-generated method stub
+		return trophyDao.updateTrophy(t_seq);
+	}
+
 
 }

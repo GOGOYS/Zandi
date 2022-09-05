@@ -21,8 +21,13 @@
 	.menu-container{
 		display: flex;
 		justify-content: space-between;
-		width:220px;
 		margin: 20px auto 0;
+	}
+	.menu-container.box1{
+		width:160px;	
+	}
+	.menu-container.box2{
+		width:260px;	
 	}
 	
 	a{
@@ -31,19 +36,23 @@
 	}
 	
 	img{
-		width: 220px;
+		width: 300px;
 	
 	}
 	
 	.img_div{
-		width: 220px;
+		width: 300px;
 		margin:200px auto 0;
 	}
 	
 	.ester{
-		margin-left: auto;
+		text-align: center;
+		margin-top:20px;
 	}
 	
+	.ester a{
+		font-size: 12px;
+	}
 </style>
 </head>
 
@@ -56,18 +65,20 @@
 	
 		<c:choose>
 			<c:when test="${LAYOUT == 'NOT_LOGIN'}">
-				<div class="menu-container">
+				<div class="menu-container box1">
 					<a href="${rootPath}/user/join">회원가입</a>
 					<a href="${rootPath}/user/login">로그인</a>
 				</div>
 			</c:when>
 			<c:otherwise>
-				<div class="menu-container">
+				<div class="menu-container box2">
 					<a href="${rootPath}/git">레파지토리</a>
 					<a href="${rootPath}/group">스터디</a>
 					<a href="${rootPath}/user/logout">로그아웃</a>
 				</div>
-				<a class="ester" href="${rootPath}/user/joinout">회원탈퇴</a>
+				<div  class="ester">
+					<a href="${rootPath}/user/joinout">회원탈퇴</a>
+				</div>
 			</c:otherwise>
 		</c:choose>
 	</div>

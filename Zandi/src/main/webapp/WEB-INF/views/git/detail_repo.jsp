@@ -14,12 +14,12 @@
 	<!-- <div>README : ${README.content}</div> -->	
 	<c:if test="${TODAYOK == 'OK' }" >
 		<div class="repo-container">
-	 		<span>${REPONAME}의 오늘 커밋 완료</span>
+	 		<span>${REPONAME} 오늘의 커밋 완료</span>
 	 	</div>
 	</c:if>
 	<c:if test="${TODAYOK == 'NO' }" >
 		<div class="repo-container">
-	 		<span>${REPONAME}의 오늘 커밋 미완료</span>
+	 		<span>${REPONAME} 오늘의 커밋 미완료</span>
 	 	</div>
 	</c:if>
 

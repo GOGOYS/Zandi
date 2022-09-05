@@ -8,7 +8,14 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
-	.in-container-box{
+
+	*{
+		box-sizing: border-box;
+		list-style: none;
+		margin:0;
+		padding:0;
+	}
+	.in-box{
 		background-color: green;
 		border-radius: 8px;
 		width: 300px;
@@ -34,26 +41,41 @@
 		width:220px;
 	}
 	
+	.zandi-container{
+		display: flex;
+	}
+	
+	.zandi-img{
+		margin-left: 6px;
+	}
+	
 </style>
 </head>
 <body>
 	<div class="wrap-container">
 		<h1>STUDY LIST</h1>
-		<div>${USER}</div>
-		<div>잔디: </div>
-		<c:forEach items="${TROPHY}" var="TROPHY">
-			<div>
-				<img src="${rootPath}/static/image/trophy.png" title="스터디: ${TROPHY.t_groupname} / 완료율: ${TROPHY.t_complete}" alt="완료율에 따른 트로피">
-			</div>
-		</c:forEach>
+		<div class="zandi-container">
+			<div>${USER}님의 잔디 : </div>
+			<c:forEach items="${TROPHY}" var="TROPHY">
+					<img  class="zandi-img" src="${rootPath}/static/image/trophy.png" title="${TROPHY.t_groupname}의 잔디" alt=" ${TROPHY.t_groupname} 트로피">
+			</c:forEach>
+		</div>
+		<c:if test="${not empty FULLIN}">
+			<div>${FULLIN}의 입장 정원이 초과했습니다</div>
+		</c:if>	
 		
-		<c:forEach items="${GROUPLIST}" var="GROUP">
-			<div class="in-container-box">
-				<div>스터디방 : ${GROUP.g_name}</div>
-				<div>참여 인원 : ${GROUP.g_inpeople} / ${GROUP.g_people}</div>
-				<a href="${rootPath}/group/group_in/${GROUP.g_seq}">참가하기</a>		
-			</div>		
-		</c:forEach>
+		<div class="container-box">
+			<c:forEach items="${GROUPLIST}" var="GROUP">
+					<div class="target in-box" data-seq="${GROUP.g_seq}">
+						<div>스터디방 : ${GROUP.g_name}</div>
+						<div>참여 인원 : ${GROUP.g_inpeople} / ${GROUP.g_people}</div>
+						<c:choose>
+							<c:when test="${empty GROUP.period}">D-DAY</c:when>	
+							<c:otherwise>D-${GROUP.period}</c:otherwise>
+						</c:choose>
+					</div>
+			</c:forEach>
+		</div>		
 
 		<form class="form-box" method="POST" >
 			<fieldset>
@@ -73,4 +95,8 @@
 		<a href="${rootPath}/">홈으로 가기</a>
 	</div>
 </body>
+<script>
+	const rootPath = "${rootPath}"
+</script>
+<script src="${rootPath}/static/js/group.js?var=2022-09-06-002"></script>
 </html>
