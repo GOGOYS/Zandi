@@ -14,16 +14,16 @@
  	</select>
 
  	<insert id="insert" parameterType="TrophyVO">
-		INSERT INTO tbl_comment(
+		INSERT INTO tbl_trophy(
 			t_groupseq,
 			t_username,
-			t_complate,
-			t_trophy,
+			t_complete,
+			t_trophy
 		)VALUES(
 			#{t_groupseq},
 			#{t_username},
-			#{t_complate},
-			#{t_trophy},
+			#{t_complete},
+			#{t_trophy}
 		)
  	</insert>
  
@@ -32,7 +32,7 @@
 			t_seq BIGINT AUTO_INCREMENT PRIMARY KEY,
 			t_groupseq BIGINT NOT NULL,
 			t_username VARCHAR(20) NOT NULL,
-			t_complate VARCHAR(5),
+			t_complete VARCHAR(5),
 			t_trophy boolean
 		)
  	</select>	

@@ -8,7 +8,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<%@ include file="/WEB-INF/views/load.jsp" %>
 	<h1>repo detail</h1>
 	
 	<div>레파지토리 이름: ${REPONAME}</div>

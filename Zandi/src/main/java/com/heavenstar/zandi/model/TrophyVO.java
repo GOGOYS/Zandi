@@ -16,7 +16,8 @@ import lombok.ToString;
 public class TrophyVO {
 	
 	private long t_seq;
-	private long t_groupseq;
+	private long t_groupseq;	
+	private String t_groupname;
 	private String t_username;
 	private String t_complete;
 	private boolean t_trophy;

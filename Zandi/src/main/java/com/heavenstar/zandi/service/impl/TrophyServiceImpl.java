@@ -3,12 +3,13 @@ package com.heavenstar.zandi.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import com.heavenstar.zandi.model.CommentVO;
 import com.heavenstar.zandi.model.TrophyVO;
 import com.heavenstar.zandi.persistance.TrophyDao;
 import com.heavenstar.zandi.service.TrophyService;
 
+@Service
 public class TrophyServiceImpl implements TrophyService{
 	
 	@Autowired
@@ -21,9 +22,9 @@ public class TrophyServiceImpl implements TrophyService{
 	}
 
 	@Override
-	public CommentVO findByUserTrophy(long t_seq) {
+	public List<TrophyVO> findByUserTrophy(String username) {
 		// TODO Auto-generated method stub
-		return trophyDao.findByUserTrophy(t_seq);
+		return trophyDao.findByUserTrophy(username);
 	}
 
 	@Override

@@ -48,7 +48,6 @@
 </head>
 
 <body>
-	<%@ include file="/WEB-INF/views/load.jsp" %>
 	<div class="container">
 		<div class="img_div">
 			<img src="${rootPath}/static/image/zandi.png">

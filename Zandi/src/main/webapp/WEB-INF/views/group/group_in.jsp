@@ -19,7 +19,6 @@
 </style>
 </head>
 <body>
-	<%@ include file="/WEB-INF/views/load.jsp" %>
 
 	<h1>${GROUP.g_name}의 스터디 룸</h1>
 	<div>스터디방의 남은 기간 : </div>

@@ -23,10 +23,12 @@ import com.heavenstar.zandi.model.CommentVO;
 import com.heavenstar.zandi.model.GroupVO;
 import com.heavenstar.zandi.model.RepoListVO;
 import com.heavenstar.zandi.model.ToOkVO;
+import com.heavenstar.zandi.model.TrophyVO;
 import com.heavenstar.zandi.model.UserVO;
 import com.heavenstar.zandi.service.CommentService;
 import com.heavenstar.zandi.service.GitService;
 import com.heavenstar.zandi.service.GroupService;
+import com.heavenstar.zandi.service.TrophyService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,11 +46,24 @@ public class GroupController {
 	@Autowired
 	private CommentService commentService;
 	
+	@Autowired
+	private TrophyService trophyService;
+	
 	@RequestMapping(value={"/",""},method=RequestMethod.GET)
-	public String group(Model model) {
+	public String group(HttpSession session, Model model) {
+		
+		String userName = username(session);
+		model.addAttribute("USER",userName);
+		
+		List<TrophyVO> trophyList = trophyService.findByUserTrophy(userName);
+		for(int i =0; i < trophyList.size(); i++) {
+			if(trophyList.get(i).isT_trophy() == false) {
+				trophyList.remove(i);
+			}
+		}
+		model.addAttribute("TROPHY",trophyList);
 		
 		List<GroupVO> groupList = groupService.selectAll();
-		
 		model.addAttribute("GROUPLIST", groupList);
 		
 		return "group/home";
@@ -109,9 +124,33 @@ public class GroupController {
 		//스터디 종료일까지 남은기간
 		int dDayCheck = groupService.dDaycheck(groupName.getG_end_date());
 		
-		if(dDayCheck == 0) {
+		if(dDayCheck == 1) {
 			//기간이 종료되면 D-DAY 보내기
 			model.addAttribute("DDAY", "DAY");
+			
+			// 기간이 0이면 완료율과 트로피값을 vo에 담아 저장
+			TrophyVO trophyVO = new TrophyVO();
+			trophyVO.setT_username(userName);
+			trophyVO.setT_groupseq(longSeq);
+			trophyVO.setT_groupname(groupName.getG_name());
+			GroupVO userGroupVO = groupService.findByOnePeople(groupName.getG_name(),userName);
+			int userCount = 0;
+			if(userGroupVO  != null) {
+				userCount = userGroupVO.getJ_count();
+			}
+
+			double douPercent = 100 * ( userCount/ (double)period);
+			log.debug("출석률:{}",douPercent);
+			if(douPercent >= 30) {
+				trophyVO.setT_trophy(true);
+			}else {
+				trophyVO.setT_trophy(false);
+			}
+			String strPercent = String.format("%.2f", douPercent);
+			trophyVO.setT_complete(strPercent);
+			log.debug("트로피:{}",trophyVO);
+			trophyService.insert(trophyVO);
+			
 		}else {			
 			model.addAttribute("DDAY",dDayCheck);
 		}

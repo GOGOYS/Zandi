@@ -37,9 +37,16 @@
 </style>
 </head>
 <body>
-	<%@ include file="/WEB-INF/views/load.jsp" %>
 	<div class="wrap-container">
 		<h1>STUDY LIST</h1>
+		<div>${USER}</div>
+		<div>잔디: </div>
+		<c:forEach items="${TROPHY}" var="TROPHY">
+			<div>
+				<img src="${rootPath}/static/image/trophy.png" title="스터디: ${TROPHY.t_groupname} / 완료율: ${TROPHY.t_complete}" alt="완료율에 따른 트로피">
+			</div>
+		</c:forEach>
+		
 		<c:forEach items="${GROUPLIST}" var="GROUP">
 			<div class="in-container-box">
 				<div>스터디방 : ${GROUP.g_name}</div>
