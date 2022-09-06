@@ -158,7 +158,8 @@
 			<div class="zandi-username">${USER}님의 잔디</div>
 			<div  class="zandi-box">
 				<c:forEach items="${TROPHY}" var="TROPHY">
-						<img  class="zandi-img" src="${rootPath}/static/image/trophy.png" title="${TROPHY.t_groupname}의 잔디" alt=" ${TROPHY.t_groupname} 트로피">
+						<img  class="zandi-img" src="${rootPath}/static/image/trophy.png"
+						title="${TROPHY.t_groupname}의 잔디" alt=" ${TROPHY.t_groupname} 트로피">
 				</c:forEach>
 			</div>
 		</div>

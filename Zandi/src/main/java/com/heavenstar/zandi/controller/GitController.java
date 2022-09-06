@@ -66,13 +66,11 @@ public class GitController {
 		intSeq -= 1;
 		
 		List<RepoListVO> repoList = gitService.getRepoList(gitName);
-		
 		for(int i=0; i< repoList.size(); i++) {
 			if(i == intSeq) {
 				
 				String repoName = repoList.get(i).name;
 				model.addAttribute("REPONAME",repoName);
-				
 				List<GitCommitVO> gitList = gitService.allCommit(gitName, repoName);
 				model.addAttribute("GITLIST",gitList);
 				int commitOk = gitService.todayOk(gitList.get(0).commit.author.getDate());
@@ -82,7 +80,6 @@ public class GitController {
 		}
 		return "git/detail_repo";
 	}
-	
 	
 	// 오늘의 커밋 검사
 	public String gitCheck(int gitOk) {

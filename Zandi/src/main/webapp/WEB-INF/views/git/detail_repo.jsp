@@ -96,7 +96,6 @@
 		<a href="${rootPath}/zandi/git"><i class="fa-solid fa-list fa-lg i-hover">리스트 가기</i></a>
 		<a href="${rootPath}/zandi"><i class="fa-solid fa-house fa-lg i-hover">홈 가기</i></a>
 	</div>
-	
 	<div class="ok-check-box">
 		<div class="ok-box">
 			<c:if test="${TODAYOK == 'OK' }" >
@@ -121,7 +120,5 @@
 			</div>
 		</c:forEach>
 	</div>
-	
-	
 </body>
 </html>

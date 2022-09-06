@@ -95,11 +95,6 @@ public class GroupServiceImpl implements GroupService{
 
 	@Override
 	public int periodCheck(String create_date,String end_date){
-		
-		//완료율 구하기
-		//1.방이 생성된 날짜로부터 마지막 날짜까지의 남은기간 구하기
-		//2. 남은 기간 동안의 출석환인률 구하기
-		
 		// 시작일부터 종료일까지 기간 구하기
 		String[] createDateStr = create_date.split("-"); 
 		String[] endDateStr = end_date.split("-");

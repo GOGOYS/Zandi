@@ -129,14 +129,11 @@ public class GroupController {
 		String userName = username(session);
 		long longSeq = Long.valueOf(g_seq);
 		GroupVO groupName = groupService.findByGroup(longSeq);
-		model.addAttribute("GROUP",groupName);
-		
+		model.addAttribute("GROUP",groupName);	
 		GroupVO group = new GroupVO();
 		group.setJ_gname(groupName.getG_name());
 		group.setJ_username(userName);
-		
-		
-		
+
 		List<GroupVO> peopleCheckList = groupService.findByGroupPeople(groupName.getG_name());
 		
 		//출석 완료율 구하기
@@ -147,17 +144,16 @@ public class GroupController {
 			String strPercent = String.format("%.2f", douPercent);
 			peopleCheckList.get(i).setJ_percent(strPercent);
 		}
-		
+	
 		//스터디 종료일까지 남은기간
 		int dDayCheck = groupService.dDaycheck(groupName.getG_end_date());
-		
 		if(dDayCheck == 0) {
 			//기간이 종료되면 D-DAY 보내기
 			model.addAttribute("DDAY", "DAY");			
 		}else {			
 			model.addAttribute("DDAY",dDayCheck);
 		}
-		
+	
 		//trophy 값 구하기
 		TrophyVO trophyVO = trophyService.findByOneTrophy(userName, longSeq);
 		//트로피가 없으면 실행
@@ -183,7 +179,6 @@ public class GroupController {
 
 		List<CommentVO> commentList = commentService.findByGroupComment(longSeq);
 		model.addAttribute("COMMENT",commentList);
-		
 		
 		//입장 처리
 		int count = groupName.getG_inpeople();
