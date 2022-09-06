@@ -9,37 +9,50 @@
 <style>
 	.error-message{
 		color:red;
+		text-align: center;
 	}
 	
-	.header{
-		margin:0 auto;	
+	h1{
+		text-align: center;
+		margin-bottom: 0;
+		color: #aaa;
+		margin-top: 200px;
 	}
-	
 	.form-box{
 		display: flex;
 		flex-direction: column;
 		width: 500px;
-		margin: 0 auto;
+		margin: 10px auto 0;
+		border-top: 1px solid #aaa;
 	}
 	
 	button{
-		margin-top:6px;
-		width: 380px;
-		background-color: blue;
-		color:white;
-		border: none;
+		margin-top:10px;
+		padding:6px 10px;
+		width: inherit;
+		background-color: white;
+		color:#49d170;
+		border: 1px solid #49d170;
+		border-radius: 8px;
+		font-size: 20px;
+		font-weight: 900;
+	}
+	
+	button:hover{
+		background-color: #49d170;
+		color: white;
 	}
 	
 	.input-box input{
-		width: 380px;
+		width:  492px;
+		margin-top: 10px;
+		height: 30px;
 	}
 
 </style>
 </head>
 <body>
-	<div class="header">
-		<div>로그인</div>
-	</div>
+		<h1>로그인</h1>
 	<form method="POST" class="form-box">
 				<c:if test="${error == 'LOGIN_FAIL'}">
 					<div>

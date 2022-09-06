@@ -48,6 +48,8 @@
 		display: flex;
 		flex-direction: column;
 		margin:10px 10% 0;
+		height: 760px;
+		overflow-y: scroll;
 	}
 	
 	.commit-box{
@@ -81,8 +83,9 @@
 		color: white;
 		font-weight: bold;
 	}
+	
 	.commit-box:hover >.commit-date{
-	border-bottom: 1px solid white;
+		border-bottom: 1px solid white;
 	}
 	
 </style>
@@ -98,12 +101,12 @@
 		<div class="ok-box">
 			<c:if test="${TODAYOK == 'OK' }" >
 				<div class="repo-ok">
-			 		<span>RepoName : ${REPONAME} 오늘의 커밋 완료</span>
+			 		<span><strong>${REPONAME}</strong> 오늘의 커밋 완료</span>
 			 	</div>
 			</c:if>
 			<c:if test="${TODAYOK == 'NO' }" >
 				<div class="repo-ok">
-			 		<span>RepoName : <strong>${REPONAME}</strong> 오늘의 커밋 미완료</span>
+			 		<span><strong>${REPONAME}</strong> 오늘의 커밋 미완료</span>
 			 	</div>
 			</c:if>
 		</div>

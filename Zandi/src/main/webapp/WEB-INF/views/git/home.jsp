@@ -88,22 +88,9 @@
 <body>
 	<h1>My Zandi</h1>
 	<a href="${rootPath}/"><i class="fa-solid fa-house fa-lg i-hover"></i></a>
-	
 	<div class="zandi-img">
 		<img src="${IMAGE}" />
 	</div>
-	
-	<c:if test="${TODAYOK == 'OK' }" >
-		<div>
-	 		<span> 오늘의 커밋 완료</span>
-	 	</div>
-	</c:if>
-	<c:if test="${TODAYOK == 'NO' }" >
-		<div>
-	 		<span>오늘의 커밋 미완료</span>
-	 	</div>
-	</c:if>
-	
 	<h2>My RepoList</h2>
 	<c:if test="${not empty REPONAME}">
 		<div class="repo-container">

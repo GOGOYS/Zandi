@@ -21,7 +21,6 @@
 	h1, h2{
 		text-align: center;
 		margin-bottom: 0;
-		color: #aaa;
 		margin-top:30px;
 		margin-bottom: 10px;
 	}
@@ -107,14 +106,25 @@
 		margin-bottom: 10px;
 	}
 	
-	.comment-title{
-		display: flex;
-
+	.comment-not{
+		border: 1px solid #aaa;
+		border-radius: 8px;
+		padding: 12px 20px;
+		margin-bottom: 10px;
 	}
 	
+	.not-comment{
+		text-align: center;
+		font-weight: bold;
+		font-size: 20px;
+	}
+	
+	.comment-title{
+		display: flex;
+	}
 	.comment-title div:first-child{
 		width: 180px;
-		margin-bottom:4px;
+		margin-bottom:8px;
 	}
 	.comment-title div:last-child {
 		margin-left: 30px;
@@ -125,11 +135,29 @@
 	.form-comment{
 		margin-top: 20px;
 	}
+	
+	
+	textarea{
+		margin: 10px 6px 0 6px;
+		border-radius: 8px;
+	}
+	button{
+		padding: 6px 10px;
+		background-color: white;
+		border:1px solid #49d170;
+		color: #49d170;
+		border-radius: 8px;
+	}
+	
+	button:hover{
+		color: white;
+		background-color: #49d170;
+	}
 </style>
 </head>
 <body>
 
-	<h1>${GROUP.g_name}의 스터디 룸</h1>
+	<h1>${GROUP.g_name} Study Room</h1>
 	<div class="menu-box">
 		<a href="${rootPath}/group/out/${GROUP.g_seq}"><i class="fa-sharp fa-solid fa-door-open fa-lg i-hover" >스터디 탈퇴하기</i></a>
 		<a href="${rootPath}/group/list"><i class="fa-solid fa-list fa-lg i-hover">리스트 가기</i></a>
@@ -144,7 +172,7 @@
 	</div>
 	<div class="container-wrap">
 		<div class="peopleList-container">
-			<h2>Participants</h2>
+			<h2>Participants : ${GROUP.g_inpeople} / ${GROUP.g_people}</h2>
 			<div class="peopleList-box">
 				<div class="people-box-list">
 					<div>이름</div>
@@ -162,6 +190,11 @@
 		<div class="comment-container">	
 			<h2>Comment List</h2>
 				<div class="comment-list">
+					<c:if test="${empty COMMENT}">
+						<div class="comment-not">
+							<div class="not-comment">not recoded comment</div>
+						</div>	
+					</c:if>
 					<c:forEach items="${COMMENT}" var="COMMENT">
 						<div class="comment-box">
 							<div class="comment-title">
@@ -177,8 +210,8 @@
 				<form class="form-comment" method="POST">
 					<fieldset>
 						<legend>Create Comment</legend>
-						<textarea name="c_comment" placeholder="내용을 입력하세요" cols="120" rows="6"></textarea>
-						<button>작성</button>
+							<textarea name="c_comment" placeholder="내용을 입력하세요" cols="156" rows="6"></textarea>
+							<button>작성</button>
 					</fieldset>
 				</form>
 		</div>

@@ -87,7 +87,6 @@ public class GroupController {
 	@RequestMapping(value={"/",""},method=RequestMethod.POST)
 	public String group(GroupVO groupVO, HttpSession session) {
 		
-		
 		Date currDate = new Date(System.currentTimeMillis());
 		
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -104,7 +103,6 @@ public class GroupController {
 		List<GroupVO> groupList =groupService.selectAll();
 		int size = groupList.size() -1;
 		long longSeq = groupList.get(size).getG_seq();
-		
 		
 		//인원 처리
 		GroupVO groupName = groupService.findByGroup(longSeq);
@@ -348,7 +346,7 @@ public class GroupController {
 	
 	//TODO 퍼센트 체크(완료율)
 	public boolean percentCheck(Double douPercent) {
-		if(douPercent >= 10) {
+		if(douPercent >= 80) {
 			return true;
 		}else {
 			return false;

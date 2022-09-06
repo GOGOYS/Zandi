@@ -46,12 +46,8 @@ public class GitController {
 		
 		model.addAttribute("USER",userVO);
 		
-		
-		if(session.getAttribute("REPONAME")== null) {
-			List<RepoListVO> getRepoList =gitService.getRepoList(gitName);
-			session.setAttribute("REPONAME",getRepoList);			
-		}
-		List<RepoListVO> list = (List)session.getAttribute("REPONAME");
+		List<RepoListVO> getRepoList =gitService.getRepoList(gitName);
+		model.addAttribute("REPONAME",getRepoList);			
 		
 		String currentImg = currentImg(user.u_username);
 		model.addAttribute("IMAGE",currentImg);

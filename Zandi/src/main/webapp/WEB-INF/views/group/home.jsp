@@ -69,6 +69,10 @@
 		width: 272px;
 	}
 	
+	.no-study-now{
+		margin: 20px auto 0;
+	}
+	
 
 	
 	.study-title{

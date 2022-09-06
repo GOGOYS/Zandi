@@ -48,30 +48,22 @@ public class GitServiceImpl implements GitService{
 	@Override
 	public int CommitOk(String id, String repo) throws IOException, ParseException {
 		//가장 최근 커밋
-		
 		String token = Config.TOKEN;
 		String url = "https://api.github.com/repos/" + id + "/" + repo + "/commits";
-		
 		URI restURI = null;
 		try {
 			restURI = new URI(url);
 		} catch (URISyntaxException e) {
-			// 연결이 되지 않음
 			return 0;
 		}
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", "token "+ token);
-		
-		headers.setAccept(
-				Collections.singletonList(
-						MediaType.APPLICATION_JSON));
-		
+		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 		HttpEntity<String> entity 
 		= new HttpEntity<String>("parameter",headers);
 		
 		RestTemplate restTemp = new RestTemplate();
-		
 		ResponseEntity<List<GitCommitVO>> resData = null;
 			
 		resData = restTemp.exchange(
@@ -81,8 +73,7 @@ public class GitServiceImpl implements GitService{
 					new ParameterizedTypeReference<List<GitCommitVO>>() {}
 					);
 		
-		List<GitCommitVO> gitList = resData.getBody();
-		
+		List<GitCommitVO> gitList = resData.getBody();	
         // 날짜 변환
         String transDate = dataTransate(gitList.get(0).commit.author.getDate());                
         int result = todayOk(transDate);
@@ -97,7 +88,6 @@ public class GitServiceImpl implements GitService{
 
 		String token = Config.TOKEN;
 		String url = "https://api.github.com/repos/" + id + "/" + repo + "/commits";
-		
 		URI restURI = null;
 		try {
 			restURI = new URI(url);
@@ -105,15 +95,12 @@ public class GitServiceImpl implements GitService{
 			return null;
 		}
 
-
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", "token "+ token);	
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));	
-
 		HttpEntity<String> entity = new HttpEntity<String>("parameter", headers);	
 
 		RestTemplate restTemp = new RestTemplate();
-		
 		ResponseEntity<List<GitCommitVO>> resData = null;
 			
 		resData = restTemp.exchange(
@@ -243,28 +230,13 @@ public class GitServiceImpl implements GitService{
 			return null;
 		}
 
-		//Http 프로토콜에 보안정보를 세팅하여
-		//Naver로 전송할 준비
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", "token "+ token);
-		
-		//XML 데이터 type으로 받겠다.
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 		
-		// headers에 추가된 정보를 Entity type의 객체로 변환하기
 		HttpEntity<String> entity = new HttpEntity<String>("parameter", headers);
-		
-		/*
-		 * 
-		 * NaverParent는 List<VO> 타입의 items 변수를 가지는데
-		 * 여기에서 VO type을 BookVO로 확정지어 준다.
-		 */
-		
 		RestTemplate restTemp = new RestTemplate();
 		
-		
-		//VO가 아닌 String형으로 수신할것이다.
-		//문자열 타입으로 그대로 수신한다
 			ResponseEntity<List<RepoListVO>> resData = null;
 			
 			resData = restTemp.exchange(
@@ -273,10 +245,8 @@ public class GitServiceImpl implements GitService{
 						entity,
 						new ParameterizedTypeReference<List<RepoListVO>>(){}
 						);
-			
-			
+
 			List<RepoListVO> repoList = resData.getBody();
-			
 			for(int i =0; i< repoList.size(); i++) {
 				
 				if(repoList.get(i).name == null) {
