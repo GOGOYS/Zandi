@@ -33,6 +33,7 @@
 	a{
 		color: #aaa;
 		text-decoration: none;
+		font-weight: 900;
 	}
 	
 	img{
