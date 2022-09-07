@@ -53,7 +53,7 @@
 		border: 2px solid #49d170;	
 		border-radius: 8px;
 		margin:10px 10px 0 0;
-		width: 240px;
+		width: 236px;
 	}
 	
 	.repo-box:hover{

@@ -69,6 +69,11 @@
 		width: 272px;
 	}
 	
+	.full-in{
+		text-align: center;
+		color:red;
+	}
+	
 	.no-study-now{
 		margin: 20px auto 0;
 	}
@@ -164,12 +169,12 @@
 			</div>
 		</div>
 		
-		<div class="container-box">
 			<c:if test="${not empty FULLIN}">
 				<div class="full-in">
 					<div>${FULLIN}의 입장 정원이 초과했습니다</div>
 				</div>
 			</c:if>	
+		<div class="container-box">
 			<c:if test="${ empty GROUPLIST}">
 				<div class="no-study-now">
 					<div>생성된 스터디가 없습니다. 만들어 볼까요?</div>

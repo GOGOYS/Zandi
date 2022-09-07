@@ -48,7 +48,7 @@
 		display: flex;
 		flex-direction: column;
 		margin:10px 10% 0;
-		height: 760px;
+		height: 700px;
 		overflow-y: scroll;
 	}
 	

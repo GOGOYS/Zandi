@@ -341,7 +341,7 @@ public class GroupController {
 	
 	//TODO 퍼센트 체크(완료율)
 	public boolean percentCheck(Double douPercent) {
-		if(douPercent >= 80) {
+		if(douPercent >= 10) {
 			return true;
 		}else {
 			return false;
