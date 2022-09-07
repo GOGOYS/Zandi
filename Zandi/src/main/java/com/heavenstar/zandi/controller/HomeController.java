@@ -27,8 +27,6 @@ public class HomeController {
 		if(userVO == null) {
 			model.addAttribute("LAYOUT","NOT_LOGIN");
 		}
-		
 		return "home";
 	}
-	
 }

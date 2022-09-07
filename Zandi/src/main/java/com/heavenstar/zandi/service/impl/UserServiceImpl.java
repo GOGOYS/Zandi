@@ -16,7 +16,6 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private UserDao userDao;
 
-
 	@Override
 	public List<UserVO> selectAll() {
 		// TODO Auto-generated method stub
@@ -58,9 +57,5 @@ public class UserServiceImpl implements UserService{
 	public void create_user_table() {
 
 	}
-
-
-	
-
 
 }

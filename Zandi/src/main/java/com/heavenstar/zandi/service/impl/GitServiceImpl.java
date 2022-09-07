@@ -42,8 +42,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class GitServiceImpl implements GitService{
-	
-	
 
 	@Override
 	public int CommitOk(String id, String repo) throws IOException, ParseException {
@@ -78,10 +76,8 @@ public class GitServiceImpl implements GitService{
         String transDate = dataTransate(gitList.get(0).commit.author.getDate());                
         int result = todayOk(transDate);
 
-		return result;
-	
+		return result;	
 	}
-
 
 	@Override
 	public List<GitCommitVO> allCommit(String id, String repo) throws IOException, ParseException {
@@ -122,8 +118,7 @@ public class GitServiceImpl implements GitService{
 	
 	@Override
 	public ReadmeVO getReadme(String id, String repo) throws IOException, ParseException {
-		
-		
+			
 		String url = " https://api.github.com/repos/" + id + "/" + repo + "/readme";
 		
 		//파일 읽어들이기
@@ -162,7 +157,6 @@ public class GitServiceImpl implements GitService{
 		return readmeVO;
 	}
 	
-	
 	// 날짜 변환
 	@Override
 	public String dataTransate(String date) {
@@ -178,25 +172,19 @@ public class GitServiceImpl implements GitService{
 			dateTime = sdf.format(strDate);
 		} catch (java.text.ParseException e) {
 			e.printStackTrace();
-		}
-		
+		}	
 		return dateTime;
-		
 	}
-
 
 	@Override
-	public String readmeTransate(String content) throws UnsupportedEncodingException {
+	public String readmeTransate(String content) throws UnsupportedEncodingException {		
 		
 		String target = content;
-		  byte[] targetBytes = target.getBytes("UTF-8");
-		
+		byte[] targetBytes = target.getBytes("UTF-8");
 		byte[] decoded = Base64.getDecoder().decode(targetBytes);
 		String read = new String(decoded, StandardCharsets.UTF_8);
-		
 		return read;
 	}
-
 	
 	// 오늘 커밋 비교
 	@Override
@@ -217,7 +205,6 @@ public class GitServiceImpl implements GitService{
 		return 0;
 	}
 
-
 	@Override
 	public List<RepoListVO> getRepoList(String u_github_id) throws IOException, ParseException{
 		
@@ -237,29 +224,22 @@ public class GitServiceImpl implements GitService{
 		HttpEntity<String> entity = new HttpEntity<String>("parameter", headers);
 		RestTemplate restTemp = new RestTemplate();
 		
-			ResponseEntity<List<RepoListVO>> resData = null;
-			
-			resData = restTemp.exchange(
-						restURI, 
-						HttpMethod.GET, 
-						entity,
-						new ParameterizedTypeReference<List<RepoListVO>>(){}
-						);
+		ResponseEntity<List<RepoListVO>> resData = null;
+		resData = restTemp.exchange(
+					restURI, 
+					HttpMethod.GET, 
+					entity,
+					new ParameterizedTypeReference<List<RepoListVO>>(){}
+					);
 
-			List<RepoListVO> repoList = resData.getBody();
-			for(int i =0; i< repoList.size(); i++) {
+		List<RepoListVO> repoList = resData.getBody();
+		for(int i =0; i< repoList.size(); i++) {
 				
-				if(repoList.get(i).name == null) {
-					repoList.remove(i);
-				}
+			if(repoList.get(i).name == null) {
+				repoList.remove(i);
 			}
-			return repoList;
+		}
 		
+		return repoList;
 	}
-	
-	
-	
-	
-	
-
 }

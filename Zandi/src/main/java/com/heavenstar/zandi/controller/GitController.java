@@ -101,7 +101,5 @@ public class GitController {
 		String time = timeFormat.format(curDate);
 		String img = "https://ghchart.rshah.org/"+ u_username + "?ver=" + date + "-" + time ;
 		return img;
-	}
-	
-	
+	}	
 }

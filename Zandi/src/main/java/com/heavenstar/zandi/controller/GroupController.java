@@ -78,7 +78,6 @@ public class GroupController {
 				String strPeriod = String.valueOf(period);
 				groupList.get(i).setPeriod(strPeriod);
 			}			
-			
 		}
 		model.addAttribute("GROUPLIST", groupList);
 		
@@ -120,8 +119,6 @@ public class GroupController {
 		return "redirect:/group/group_in/" + longSeq;
 	}
 
-	
-	
 	@RequestMapping(value="/group_in/{g_seq}",method=RequestMethod.GET)
 	public String group_in(@PathVariable("g_seq") String g_seq,HttpSession session,
 			Model model) throws IOException, ParseException, java.text.ParseException {
@@ -270,8 +267,6 @@ public class GroupController {
 		return "redirect:/group/group_in/" +g_seq;
 	}
 	
-
-	
 	@RequestMapping(value="/out/{g_seq}",method=RequestMethod.GET)
 	public String groupOut(@PathVariable("g_seq") String g_seq, HttpSession session) {
 		
@@ -282,8 +277,7 @@ public class GroupController {
 		GroupVO groupVO = groupService.findByGroup(longSeq);
 		String groupName = groupVO.getG_name();
 		GroupVO people = groupService.findByOnePeople(groupName, userName);
-		groupService.deletePeople(people.getJ_seq());
-		
+		groupService.deletePeople(people.getJ_seq());	
 		
 		//가입 인원이 들어오면 g_inpeople에 1씩 감소하여
 		//인원수 카운트 줄이기
@@ -310,7 +304,6 @@ public class GroupController {
 		
 		UserVO user = (UserVO)session.getAttribute("USER");
 		String userName = user.u_username;
-		
 		return userName;
 	}
 	
@@ -347,5 +340,4 @@ public class GroupController {
 			return false;
 		}
 	}
-
 }

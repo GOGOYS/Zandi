@@ -144,10 +144,4 @@ public class GroupServiceImpl implements GroupService{
 		return diffDays;
 		
 	}
-
-
-
-
-
-
 }

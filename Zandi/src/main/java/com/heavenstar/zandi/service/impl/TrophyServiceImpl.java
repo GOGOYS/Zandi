@@ -49,6 +49,4 @@ public class TrophyServiceImpl implements TrophyService{
 		// TODO Auto-generated method stub
 		return trophyDao.updateTrophy(t_seq);
 	}
-
-
 }
